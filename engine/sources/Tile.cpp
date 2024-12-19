@@ -39,9 +39,8 @@ void Tile::render()
     }
 
     if(isSelected)
-    {
-        // do nothing for now
-        // eventually render gray
+    { // if it's selected, fade it
+        pWindowRenderer->fadeRect(&screenCords);
     }
 }
 

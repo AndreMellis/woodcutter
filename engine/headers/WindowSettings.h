@@ -3,8 +3,8 @@
 
 struct WindowSettings
 {
-    constexpr static int windowHeight = 600;
-    constexpr static int windowWidth = 1800;
+    constexpr static int windowHeight = 900;
+    constexpr static int windowWidth = 1900;
 
     constexpr static int tileHeight = 30;
     constexpr static int tileWidth = 30;

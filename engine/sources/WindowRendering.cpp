@@ -145,3 +145,18 @@ void WindowRendering::drawImg(std::string path, SDL_Rect *shape)
 	pLoadedText = nullptr;
 	pLoadedSurface = nullptr;
 }
+
+void WindowRendering::fadeRect(SDL_Rect *shape)
+{
+	/*
+		To calculate the transparency (0xCC) you have to define a percentage of 0-255
+		since I want 60%, I would take 60% of 255 (max) and get 153 
+		153 in hex is 0x99
+	*/
+	SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND); // set sdl to blend the next thing it draws
+	SDL_SetRenderDrawColor(gRenderer, 0x99, 0x99, 0x99, 0x99); // make the next thing I draw white
+	SDL_RenderFillRect(gRenderer, shape);
+
+
+	SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_NONE); // stop blending
+}

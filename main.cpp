@@ -29,8 +29,16 @@ int main(int argc, char *args[])
             {
                 pWindowRenderer->close();
                 quit=1;
+            } else
+            {
+                map.handleEvent(event);
             }
         }
+        if(quit) {break;}
+
+        pWindowRenderer->clearBuffer();
+        map.render();
+        pWindowRenderer->renderPresent();
     }
 
     return 0;

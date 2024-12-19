@@ -19,6 +19,9 @@ public:
 
     void render();
     void handleEvent( SDL_Event &event );
+
+    void selectTile(int mouseX, int mouseY); // takes the mouse's X and Y, then selects that tile
+    Tile *getSelectedTile() {return selectedTile;} // returns pointer to selected tile
 };
 
 #endif

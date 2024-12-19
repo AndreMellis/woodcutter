@@ -15,16 +15,16 @@ void Map::genMap()
         {
             // here we need a random tile Type
             int randNum = 1 + (rand() % 2);
+            int newY = row * WindowSettings::tileHeight;
+            int newX = col * WindowSettings::tileWidth;
 
             switch(randNum)
             {
                 case 1:
-                    map[row][col] = Tile( row * WindowSettings::tileHeight, row * WindowSettings::tileWidth, TileType::Grass );
-                    printf("row %d col %d was set to grass\n", row, col);
+                    map[row][col] = Tile(newY, newX, TileType::Grass);
                     break;
                 case 2:
-                    map[row][col] = Tile( row * WindowSettings::tileHeight, row * WindowSettings::tileWidth, TileType::Water );
-                    printf("row %d col %d was set to water\n", row, col);
+                    map[row][col] = Tile(newY, newX, TileType::Water);
                     break;
             }
         }
@@ -37,8 +37,46 @@ void Map::render()
     {
         for( int col = 0; col < WindowSettings::tileWidthCount; col++ )
         {
-            printf("rendering row %d col %d\n", row, col);
             map[row][col].render();
+        }
+    }
+}
+
+void Map::selectTile(int mouseX, int mouseY)
+{
+    int tileX = mouseX / WindowSettings::tileWidth;
+    int tileY = mouseY / WindowSettings::tileHeight;
+
+    if(selectedTile != nullptr)
+    {
+        selectedTile->deselect();
+    }
+
+    selectedTile = &map[tileY][tileX];
+    selectedTile->select();
+}
+
+void Map::handleEvent( SDL_Event &event )
+{
+    if( event.type == SDL_MOUSEBUTTONDOWN )
+    { // we clicked something
+        int mouseX;
+        int mouseY;
+        SDL_GetMouseState( &mouseX, &mouseY);
+        printf("moused pressed at X: %d Y: %d \n", mouseX, mouseY);
+        selectTile(mouseX,mouseY);
+    }
+    if( event.type == SDL_KEYDOWN && event.key.repeat == 0)
+    {
+        switch( event.key.keysym.sym)
+        {
+            case SDLK_ESCAPE:
+                if(selectedTile)
+                {
+                    selectedTile->deselect();
+                    selectedTile = nullptr;
+                }
+                break;
         }
     }
 }

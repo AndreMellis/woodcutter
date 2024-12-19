@@ -33,6 +33,8 @@ public:
 	void drawSolidRect(SDL_Rect *shape);
 	void drawString(std::string inputStr, SDL_Rect *shape); // draws a string to screen
 	void drawImg(std::string path, SDL_Rect *shape); // draws a png to screen
+
+	void fadeRect(SDL_Rect *shape); // fades out certain cords
 };
 
 #endif
