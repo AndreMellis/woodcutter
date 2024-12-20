@@ -42,4 +42,33 @@ void Map::render(SDL_Renderer *renderer, SDL_Texture *pTextureArray[])
             }
         }
     }
+
+    // now we will render the selected tile grey
+    if(pSelectedTile != nullptr)
+    {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND); //enable alpha on next thing I draw
+        SDL_SetRenderDrawColor(renderer, 0xCC, 0xCC, 0xCC, 0x99); // 60% grey
+        SDL_RenderFillRect(renderer, pSelectedTile->getCords() );
+
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE); //disable alpha on next thing I draw
+        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF); // go back to drawing white
+    }
+}
+
+void Map::handleEvent( SDL_Event &event )
+{
+    if( event.type == SDL_EVENT_MOUSE_BUTTON_DOWN )
+    {
+        // get the tile the user clicked
+        float mouseX;
+        float mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
+        // update pointer
+        int tileX = mouseX / GameSettings::tileWidth;
+        int tileY = mouseY / GameSettings::tileHeight;
+
+        pSelectedTile = &map[tileY][tileX];
+
+    }
 }

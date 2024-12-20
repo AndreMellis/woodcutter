@@ -104,6 +104,9 @@ void Game::run()
             {
                 running = 0;
                 break;
+            } else
+            {
+                gameMap.handleEvent(event);
             }
         }
         if( !running )

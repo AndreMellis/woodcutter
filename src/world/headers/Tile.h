@@ -15,7 +15,6 @@ class Tile
 private:
     TileType type;
     SDL_FRect screenCords;
-    bool isSelected;
 
 public:
     Tile(float x, float y, TileType inputType);

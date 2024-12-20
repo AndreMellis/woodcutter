@@ -12,7 +12,7 @@ class Map
 {
 private:
     Tile map[GameSettings::tileHeightCount][GameSettings::tileWidthCount];
-    Tile *selectedTile; // the tile currently clicked on the map to render special
+    Tile *pSelectedTile; // the tile currently clicked on the map to render special
 
 public:
     void genMap(); // generates the 2d array with random tiles
