@@ -1,10 +1,10 @@
-#ifndef WINDOWSETTINGS_HEADER_
-#define WINDOWSETTINGS_HEADER_
+#ifndef GAMESETTINGS_HEADER_
+#define GAMESETTINGS_HEADER_
 
-struct WindowSettings
+struct GameSettings
 {
+    constexpr static int windowWidth = 1600;
     constexpr static int windowHeight = 900;
-    constexpr static int windowWidth = 1900;
 
     constexpr static int tileHeight = 30;
     constexpr static int tileWidth = 30;

@@ -1,45 +1,11 @@
-#include "WindowRendering.h"
-#include "Map.h"
-
-#include <SDL.h>
-#include <ctime>
-#include <cstdlib>
+#include "Game.h"
 
 int main(int argc, char *args[])
 {
-    srand(time(0));
+    Game woodsmanGame;
 
-    SDL_Event event;
-    WindowRendering *pWindowRenderer = WindowRendering::getInstance();
-
-    //testing block
-    Map map;
-
-    pWindowRenderer->clearBuffer();
-    map.render();
-    pWindowRenderer->renderPresent();
-
-    bool quit = 0;
-    
-    while(!quit)
-    {
-        while( SDL_PollEvent( &event ) != 0)
-        {
-            if( event.type == SDL_QUIT )
-            {
-                pWindowRenderer->close();
-                quit=1;
-            } else
-            {
-                map.handleEvent(event);
-            }
-        }
-        if(quit) {break;}
-
-        pWindowRenderer->clearBuffer();
-        map.render();
-        pWindowRenderer->renderPresent();
-    }
-
+    woodsmanGame.init();
+    woodsmanGame.run();
+    woodsmanGame.close();
     return 0;
 }
