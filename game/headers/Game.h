@@ -12,6 +12,7 @@
 #include "Assets.h"
 #include "GameSettings.h"
 #include "Map.h"
+#include "Player.h"
 
 class Game
 {
@@ -24,6 +25,7 @@ private:
     bool loadAssets(); // loads all assets into the array
 
     Map gameMap;
+    Player player;
 
 public:
     Game();

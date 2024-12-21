@@ -82,6 +82,9 @@ bool Game::loadAssets()
     if(pTextureArray[asset_Water] == nullptr)
         return 0;
 
+    if( !player.loadSpriteSheet(renderer) )
+        return 0;
+
     return 1;
 }
 
@@ -94,6 +97,7 @@ void Game::run()
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
     gameMap.render(renderer, pTextureArray);
+    player.render(renderer);
     SDL_RenderPresent(renderer);
 
     while(running)
@@ -107,6 +111,7 @@ void Game::run()
             } else
             {
                 gameMap.handleEvent(event);
+                player.handleEvent(event);
             }
         }
         if( !running )
@@ -116,6 +121,7 @@ void Game::run()
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
         SDL_RenderClear(renderer);
         gameMap.render(renderer, pTextureArray);
+        player.render(renderer);
         SDL_RenderPresent(renderer);
     }
 }

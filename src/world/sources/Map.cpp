@@ -72,3 +72,55 @@ void Map::handleEvent( SDL_Event &event )
 
     }
 }
+
+Tile *Map::getNeighorTileFromScreenCords(float x, float y, CardinalCord direction)
+{
+    // transform screen cords to matrix loc
+    int matrixX = x / GameSettings::tileWidth;
+    int matrixY = y / GameSettings::tileHeight;
+
+    // now let's handle out of bound excepts
+    if( matrixX <= 0 && direction == CardinalCord::WEST)
+    {
+        return nullptr;
+    } else if( matrixX >= (GameSettings::tileWidthCount - 1) && direction == CardinalCord::EAST)
+    {
+        return nullptr;
+    } else if( matrixY <= 0 && direction == CardinalCord::NORTH)
+    {
+        return nullptr;
+    } else if( matrixY >= (GameSettings::tileHeightCount - 1) && direction == CardinalCord::SOUTH)
+    {
+        return nullptr;
+    } else{
+        switch (direction)
+        {
+            case CardinalCord::NORTH:
+                //north would be x and y-1
+                return &map[matrixY-1][matrixX];
+                break;
+
+            case CardinalCord::EAST:
+                //east would be x+1 and y
+                return &map[matrixY][matrixX+1];
+                break;
+
+            case CardinalCord::SOUTH:
+                //south would be x and y+1
+                return &map[matrixY+1][matrixX];
+                break;
+
+            case CardinalCord::WEST:
+                //west would be x-1 and y
+                return &map[matrixY][matrixX-1];
+                break;
+                break;
+        
+            default:
+                return nullptr;
+                break;
+        }
+    }
+
+    return nullptr; // just to stop the warning. We should never hit this
+}

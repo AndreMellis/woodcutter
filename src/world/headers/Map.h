@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 #include <cstdlib>
 
+#include "Core.h"
 #include "Tile.h"
 #include "Assets.h"
 #include "GameSettings.h"
@@ -18,6 +19,8 @@ public:
     void genMap(); // generates the 2d array with random tiles
     void render(SDL_Renderer *renderer, SDL_Texture *pTextureArray[]);
     void handleEvent(SDL_Event &event);
+
+    Tile *getNeighorTileFromScreenCords(float x, float y, CardinalCord directon); // returns the neighboring tile in a certain direction
 };
 
 #endif
