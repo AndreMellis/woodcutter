@@ -3,6 +3,8 @@
 
 #include "GameSettings.h"
 #include "Core.h"
+#include "Tile.h"
+#include "Map.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
@@ -24,10 +26,11 @@ private:
 
     SDL_FRect screenCords;    
     Inventory inventory;
+    Map *pGameMap;
 
     CardinalCord directionFacing;
     
-
+    void move(CardinalCord moveDirection);
 public:
     Player();
     bool loadSpriteSheet(SDL_Renderer *renderer);

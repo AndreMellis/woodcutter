@@ -4,6 +4,7 @@ Game::Game()
 {
     renderer = nullptr;
     window = nullptr;
+    gameMap = Map::getInstance();
 }
 
 bool Game::init()
@@ -16,7 +17,7 @@ bool Game::init()
         SDL_SetRenderDrawColor(renderer, 0Xff, 0xFF, 0xFF, 0xFF);
         if( loadAssets() )
         {
-            gameMap.genMap();
+            gameMap->genMap();
         } else
         {
             std::cerr << "Failed to load game assets!\n";
@@ -96,7 +97,7 @@ void Game::run()
     // initial clear and render
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
-    gameMap.render(renderer, pTextureArray);
+    gameMap->render(renderer, pTextureArray);
     player.render(renderer);
     SDL_RenderPresent(renderer);
 
@@ -110,7 +111,7 @@ void Game::run()
                 break;
             } else
             {
-                gameMap.handleEvent(event);
+                gameMap->handleEvent(event);
                 player.handleEvent(event);
             }
         }
@@ -120,7 +121,7 @@ void Game::run()
         // rerender the screen
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
         SDL_RenderClear(renderer);
-        gameMap.render(renderer, pTextureArray);
+        gameMap->render(renderer, pTextureArray);
         player.render(renderer);
         SDL_RenderPresent(renderer);
     }

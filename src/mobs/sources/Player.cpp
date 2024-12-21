@@ -10,6 +10,7 @@ Player::Player()
     screenCords.h = spriteHeight * 1.5;
 
     inventory.wood=0;
+    pGameMap = Map::getInstance();
 }
 
 bool Player::loadSpriteSheet(SDL_Renderer *renderer)
@@ -65,6 +66,27 @@ void Player::render(SDL_Renderer *renderer)
     }
 }
 
+void Player::move(CardinalCord moveDirection)
+{
+    int centerX = screenCords.x + (spriteWidth / 2 );
+    int bottomY = screenCords.y + (spriteHeight - 1);
+
+    if(moveDirection == CardinalCord::NORTH && pGameMap->getNeighorTileFromScreenCords(centerX, bottomY, CardinalCord::NORTH)->canCollide() == 0)
+    {
+        screenCords.y = screenCords.y - GameSettings::tileHeight;
+    } else if(moveDirection == CardinalCord::SOUTH && pGameMap->getNeighorTileFromScreenCords(centerX, bottomY, CardinalCord::SOUTH)->canCollide() == 0)
+    {
+        screenCords.y = screenCords.y + GameSettings::tileHeight;
+    } else if(moveDirection == CardinalCord::EAST && pGameMap->getNeighorTileFromScreenCords(centerX, bottomY, CardinalCord::EAST)->canCollide() == 0)
+    {
+        screenCords.x = screenCords.x + GameSettings::tileWidth;
+    } else if(moveDirection == CardinalCord::WEST && pGameMap->getNeighorTileFromScreenCords(centerX, bottomY, CardinalCord::WEST)->canCollide() == 0)
+    {
+        screenCords.x = screenCords.x - GameSettings::tileWidth;
+    }
+
+}
+
 void Player::handleEvent(SDL_Event &event)
 {
     if( event.type == SDL_EVENT_KEY_DOWN )
@@ -75,22 +97,22 @@ void Player::handleEvent(SDL_Event &event)
             case SDLK_W:
                 // to move up decrease y;
                 directionFacing = CardinalCord::NORTH;
-                screenCords.y = screenCords.y - GameSettings::tileWidth;
+                move(CardinalCord::NORTH);
                 break;
             case SDLK_DOWN:
             case SDLK_S:
                 directionFacing = CardinalCord::SOUTH;
-                screenCords.y = screenCords.y + GameSettings::tileWidth;
+                move(CardinalCord::SOUTH);
                 break;
             case SDLK_RIGHT:
             case SDLK_D:
                 directionFacing = CardinalCord::EAST;
-                screenCords.x = screenCords.x + GameSettings::tileWidth;
+                move(CardinalCord::EAST);
                 break;
             case SDLK_LEFT:
             case SDLK_A:
                 directionFacing = CardinalCord::WEST;
-                screenCords.x = screenCords.x - GameSettings::tileWidth;
+                move(CardinalCord::WEST);
                 break;
         }
     }

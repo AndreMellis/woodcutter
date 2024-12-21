@@ -1,6 +1,17 @@
 #include "Map.h"
 #include <cstdio>
 
+Map *Map::pInstance = nullptr;
+
+Map *Map::getInstance()
+{
+    if(!pInstance)
+    {
+        pInstance = new Map();
+    }
+    return pInstance;
+}
+
 void Map::genMap()
 {
     for(int row = 0; row < GameSettings::tileHeightCount; row++ )
@@ -15,9 +26,11 @@ void Map::genMap()
             {
                 case 0:
                     map[row][col] = Tile( tileX, tileY, TileType::Grass );
+                    map[row][col].setCollidable(0);
                     break;
                 case 1:
                     map[row][col] = Tile( tileX, tileY, TileType::Water );
+                    map[row][col].setCollidable(1);
                     break;
             }
         }

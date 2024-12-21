@@ -24,7 +24,7 @@ private:
     SDL_Texture *makeTexture(std::string path); //takes in a path and returns a texture
     bool loadAssets(); // loads all assets into the array
 
-    Map gameMap;
+    Map *gameMap;
     Player player;
 
 public:

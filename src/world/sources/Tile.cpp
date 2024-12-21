@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include <cstdio>
 
 Tile::Tile(float x, float y, TileType inputType)
 {
@@ -12,4 +13,9 @@ Tile::Tile(float x, float y, TileType inputType)
 
 Tile::Tile()
 {
+}
+
+bool Tile::canCollide()
+{
+    return collidable;
 }

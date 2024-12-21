@@ -15,6 +15,7 @@ class Tile
 private:
     TileType type;
     SDL_FRect screenCords;
+    bool collidable;
 
 public:
     Tile(float x, float y, TileType inputType);
@@ -22,6 +23,9 @@ public:
 
     SDL_FRect *getCords() { return &screenCords; }
     TileType getType() { return type; }
+
+    bool canCollide();
+    void setCollidable(bool input) { collidable = input; }
 };
 
 #endif
