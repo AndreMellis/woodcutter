@@ -6,7 +6,9 @@ project(woodsman VERSION 1.0)
 include_directories("game/headers" 
                     "game/sources" 
                     "src/world/headers"
-                    "src/world/sources")
+                    "src/world/sources"
+                    "src/common/headers"
+                    "src/common/sources")
 
 #link sdl2 libraries
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
@@ -14,6 +16,7 @@ find_package(SDL3_image REQUIRED)
 
 set(SOURCES 
     game/sources/Game.cpp
+    src/common/sources/TextureHandler.cpp
     src/world/sources/Tile.cpp
     src/world/sources/Map.cpp)
 

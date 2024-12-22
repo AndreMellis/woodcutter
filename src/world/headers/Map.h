@@ -7,6 +7,7 @@
 #include "Tile.h"
 #include "Assets.h"
 #include "GameSettings.h"
+#include "TextureHandler.h"
 
 class Map
 {
@@ -14,9 +15,13 @@ private:
     Tile map[GameSettings::tileHeightCount][GameSettings::tileWidthCount];
     Tile *pSelectedTile; // the tile currently clicked on the map to render special
 
+    SDL_Texture *mapTextureArray[asset_AssetCount];
+
 public:
     void genMap(); // generates the 2d array with random tiles
-    void render(SDL_Renderer *renderer, SDL_Texture *pTextureArray[]);
+    void loadAssets(SDL_Renderer *renderer); // loads all assets to array
+
+    void render(SDL_Renderer *renderer);
     void handleEvent(SDL_Event &event);
 };
 

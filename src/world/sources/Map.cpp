@@ -1,8 +1,9 @@
 #include "Map.h"
-#include <cstdio>
 
 void Map::genMap()
 {
+    pSelectedTile = nullptr;
+
     for(int row = 0; row < GameSettings::tileHeightCount; row++ )
     {
         for( int col = 0; col < GameSettings::tileWidthCount; col++ )
@@ -24,7 +25,7 @@ void Map::genMap()
     }
 }
 
-void Map::render(SDL_Renderer *renderer, SDL_Texture *pTextureArray[])
+void Map::render(SDL_Renderer *renderer)
 {
     for(int row = 0; row < GameSettings::tileHeightCount; row++ )
     {
@@ -33,11 +34,11 @@ void Map::render(SDL_Renderer *renderer, SDL_Texture *pTextureArray[])
             switch( map[row][col].getType() )
             {
                 case TileType::Grass:
-                    SDL_RenderTexture( renderer, pTextureArray[asset_Grass], NULL, map[row][col].getCords() ); // note asset name for array coming from Assets.h
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Grass], NULL, map[row][col].getCords() ); // note asset name for array coming from Assets.h
                     break;
 
                 case TileType::Water:
-                    SDL_RenderTexture( renderer, pTextureArray[asset_Water], NULL, map[row][col].getCords() ); // note asset name for array coming from Assets.h
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Water], NULL, map[row][col].getCords() ); // note asset name for array coming from Assets.h
                     break;
             }
         }
@@ -71,4 +72,10 @@ void Map::handleEvent( SDL_Event &event )
         pSelectedTile = &map[tileY][tileX];
 
     }
+}
+
+void Map::loadAssets(SDL_Renderer *renderer)
+{
+    mapTextureArray[asset_Grass] = TextureHandler::makeTexture("assets/terrain/grass.png", renderer);
+    mapTextureArray[asset_Water] = TextureHandler::makeTexture("assets/terrain/water.png", renderer);
 }
