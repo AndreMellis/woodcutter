@@ -21,6 +21,9 @@ private:
     int cameraX;
     int cameraY;
 
+    int screenX; // this will be the Xcord of what's on screen
+    int screenY; // this will be the Ycord of what's on screen
+
 public:
     Map();
 

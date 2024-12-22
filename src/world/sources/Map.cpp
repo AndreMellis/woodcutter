@@ -54,17 +54,17 @@ void Map::render(SDL_Renderer *renderer)
     dstRect.w = GameSettings::tileWidth;
     dstRect.h = GameSettings::tileHeight;
 
-    float screenX = 0;
-    float screenY = 0;
+    float renderingX = 0;
+    float renderingY = 0;
     
     for(int row = startingRow; row < endingRow; row++ )
     {
-        dstRect.y = screenY * GameSettings::tileHeight;
-        screenX = 0;
+        dstRect.y = renderingY * GameSettings::tileHeight;
+        renderingX = 0;
 
         for( int col = startingCol; col < endingCol; col++ )
         {
-            dstRect.x = screenX * GameSettings::tileWidth;
+            dstRect.x = renderingX * GameSettings::tileWidth;
 
             switch( map[row][col] )
             {
@@ -77,10 +77,10 @@ void Map::render(SDL_Renderer *renderer)
                     break;
             }
 
-            screenX = screenX + 1.00;
+            renderingX = renderingX + 1.00;
         }
 
-        screenY = screenY + 1.00;
+        renderingY = renderingY + 1.00;
     }
 
     // now we will render the selected tile grey
@@ -127,7 +127,6 @@ void Map::handleEvent( SDL_Event &event )
                 cameraX--;
                 break;
         }
-        printf("CameraX: %d - CameraY: %d\n", cameraX, cameraY);
     }
 }
 
