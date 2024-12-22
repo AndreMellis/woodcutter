@@ -72,16 +72,21 @@ void Map::render(SDL_Renderer *renderer)
                     break;
             }
 
+            if( pSelectedTile == &map[row][col] )  // does the pointer to the selcted tile match the mem addr of this tile
+            { // we just printer the selected item
+                SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND); //enable alpha on next thing I draw
+                SDL_SetRenderDrawColor(renderer, 0xCC, 0xCC, 0xCC, 0x99); // 60% grey
+                SDL_RenderFillRect(renderer, &dstRect );
+
+                SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE); //disable alpha on next thing I draw
+                SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF); // go back to drawing white
+
+            }
+
             renderingX = renderingX + 1.00;
         }
 
         renderingY = renderingY + 1.00;
-    }
-
-    // now we will render the selected tile grey
-    if(pSelectedTile != nullptr)
-    {
-        *pSelectedTile = TileType::Empty;
     }
 }
 
