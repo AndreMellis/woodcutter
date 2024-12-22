@@ -12,12 +12,18 @@
 class Map
 {
 private:
-    Tile map[GameSettings::tileHeightCount][GameSettings::tileWidthCount];
-    Tile *pSelectedTile; // the tile currently clicked on the map to render special
+    TileType map[GameSettings::mapHeight][GameSettings::mapWidth];
+    TileType *pSelectedTile; // the tile currently clicked on the map to render special
 
     SDL_Texture *mapTextureArray[asset_AssetCount];
 
+    // we want to center camera on middle of map
+    int cameraX;
+    int cameraY;
+
 public:
+    Map();
+
     void genMap(); // generates the 2d array with random tiles
     void loadAssets(SDL_Renderer *renderer); // loads all assets to array
 

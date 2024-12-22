@@ -9,8 +9,11 @@ struct GameSettings
     constexpr static int tileHeight = 30;
     constexpr static int tileWidth = 30;
 
-    constexpr static int tileWidthCount = windowWidth / tileWidth;
-    constexpr static int tileHeightCount = windowHeight / tileHeight;
+    constexpr static int mapWidth = 200;
+    constexpr static int mapHeight = 200;
+
+    constexpr static int windowTileWidthCount = windowWidth / tileWidth;
+    constexpr static int windowTileHeightCount = windowHeight / tileHeight;
 };
 
 #endif
