@@ -1,5 +1,16 @@
 #include "Map.h"
 
+Map *Map::pInstance = 0;
+
+Map *Map::getInstance()
+{
+    if (!pInstance)
+    {
+        pInstance = new Map();
+    }
+    return pInstance;
+}
+
 Map::Map()
 {
     pSelectedTile = nullptr;
@@ -70,6 +81,10 @@ void Map::render(SDL_Renderer *renderer)
                 case TileType::Water:
                     SDL_RenderTexture( renderer, mapTextureArray[asset_Water], NULL, &dstRect ); // note asset name for array coming from Assets.h
                     break;
+                
+                case TileType::ROAD:
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Dirt], NULL, &dstRect );
+                    break;
             }
 
             if( pSelectedTile == &map[row][col] )  // does the pointer to the selcted tile match the mem addr of this tile
@@ -133,4 +148,5 @@ void Map::loadAssets(SDL_Renderer *renderer)
 {
     mapTextureArray[asset_Grass] = TextureHandler::makeTexture("assets/terrain/grass.png", renderer);
     mapTextureArray[asset_Water] = TextureHandler::makeTexture("assets/terrain/water.png", renderer);
+    mapTextureArray[asset_Dirt] = TextureHandler::makeTexture("assets/terrain/dirt.png", renderer);
 }

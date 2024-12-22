@@ -15,6 +15,7 @@ find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
 find_package(SDL3_image REQUIRED)
 
 set(SOURCES 
+    game/sources/Builder.cpp
     game/sources/Game.cpp
     src/common/sources/TextureHandler.cpp
     src/world/sources/Map.cpp)

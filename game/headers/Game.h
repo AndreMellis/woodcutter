@@ -12,16 +12,17 @@
 #include "Assets.h"
 #include "GameSettings.h"
 #include "Map.h"
+#include "Builder.h"
 
 class Game
 {
 private:
     SDL_Renderer *renderer;
     SDL_Window *window;
+    Map *pGameMap;
+    Builder builder;
 
     bool loadAssets(); // loads all assets into the array
-
-    Map gameMap;
 
 public:
     Game();

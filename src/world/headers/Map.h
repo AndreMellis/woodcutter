@@ -14,6 +14,7 @@ class Map
 private:
     TileType map[GameSettings::mapHeight][GameSettings::mapWidth];
     TileType *pSelectedTile; // the tile currently clicked on the map to render special
+    static Map *pInstance;
 
     SDL_Texture *mapTextureArray[asset_AssetCount];
 
@@ -24,14 +25,19 @@ private:
     int screenX; // this will be the Xcord of what's on screen
     int screenY; // this will be the Ycord of what's on screen
 
-public:
     Map();
+    ~Map();
+public:
+    static Map *getInstance();
 
     void genMap(); // generates the 2d array with random tiles
     void loadAssets(SDL_Renderer *renderer); // loads all assets to array
 
     void render(SDL_Renderer *renderer);
     void handleEvent(SDL_Event &event);
+
+    void deselectTile() { pSelectedTile = nullptr; }
+    TileType *getSelectedTile() { return pSelectedTile; }
 };
 
 #endif
