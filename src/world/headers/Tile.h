@@ -7,21 +7,8 @@
 enum class TileType
 {
     Grass,
-    Water
-};
-
-class Tile
-{
-private:
-    TileType type;
-    SDL_FRect screenCords;
-
-public:
-    Tile(float x, float y, TileType inputType);
-    Tile(); // default cons for array building
-
-    SDL_FRect *getCords() { return &screenCords; }
-    TileType getType() { return type; }
+    Water,
+    Empty
 };
 
 #endif

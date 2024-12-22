@@ -7,6 +7,9 @@ Map::Map()
     // center camera on map
     cameraX = GameSettings::mapWidth / 2;
     cameraY = GameSettings::mapHeight / 2;
+
+    screenX = cameraX - (GameSettings::windowTileWidthCount / 2);
+    screenY = cameraY - (GameSettings::windowTileHeightCount / 2);
 }
 
 void Map::genMap()
@@ -32,18 +35,10 @@ void Map::genMap()
 
 void Map::render(SDL_Renderer *renderer)
 {
-    int startingRow = cameraY - ( GameSettings::windowTileHeightCount / 2 );
-    if(startingRow < 0)
-        startingRow = 0;
-
     int endingRow = cameraY + ( GameSettings::windowTileHeightCount / 2 );
     if(endingRow > GameSettings::mapHeight)
         endingRow = GameSettings::mapHeight;
 
-    int startingCol = cameraX - ( GameSettings::windowTileWidthCount / 2);
-    if(startingCol < 0)
-        startingCol = 0;
-    
     int endingCol = cameraX + ( GameSettings::windowTileWidthCount / 2);
     if(endingCol > GameSettings::mapWidth)
         endingCol = GameSettings::mapWidth;
@@ -57,12 +52,12 @@ void Map::render(SDL_Renderer *renderer)
     float renderingX = 0;
     float renderingY = 0;
     
-    for(int row = startingRow; row < endingRow; row++ )
+    for(int row = screenY; row < endingRow; row++ )
     {
         dstRect.y = renderingY * GameSettings::tileHeight;
         renderingX = 0;
 
-        for( int col = startingCol; col < endingCol; col++ )
+        for( int col = screenX; col < endingCol; col++ )
         {
             dstRect.x = renderingX * GameSettings::tileWidth;
 
@@ -86,12 +81,7 @@ void Map::render(SDL_Renderer *renderer)
     // now we will render the selected tile grey
     if(pSelectedTile != nullptr)
     {
-        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND); //enable alpha on next thing I draw
-        SDL_SetRenderDrawColor(renderer, 0xCC, 0xCC, 0xCC, 0x99); // 60% grey
-        //SDL_RenderFillRect(renderer, pSelectedTile->getCords() );
-
-        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE); //disable alpha on next thing I draw
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF); // go back to drawing white
+        *pSelectedTile = TileType::Empty;
     }
 }
 
@@ -105,8 +95,8 @@ void Map::handleEvent( SDL_Event &event )
         SDL_GetMouseState(&mouseX, &mouseY);
 
         // update pointer
-        int tileX = mouseX / GameSettings::tileWidth;
-        int tileY = mouseY / GameSettings::tileHeight;
+        int tileX = screenX + (mouseX / GameSettings::tileWidth);
+        int tileY = screenY + (mouseY / GameSettings::tileHeight);
 
         pSelectedTile = &map[tileY][tileX];
 
@@ -116,15 +106,19 @@ void Map::handleEvent( SDL_Event &event )
         {
             case SDLK_W:
                 cameraY--;
+                screenY--;
                 break;
             case SDLK_S:
                 cameraY++;
+                screenY++;
                 break;
             case SDLK_D:
                 cameraX++;
+                screenX++;
                 break;
             case SDLK_A:
                 cameraX--;
+                screenX--;
                 break;
         }
     }

@@ -17,7 +17,6 @@ find_package(SDL3_image REQUIRED)
 set(SOURCES 
     game/sources/Game.cpp
     src/common/sources/TextureHandler.cpp
-    src/world/sources/Tile.cpp
     src/world/sources/Map.cpp)
 
 add_executable(woodsman.out main.cpp ${SOURCES})
