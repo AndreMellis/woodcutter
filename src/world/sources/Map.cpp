@@ -74,14 +74,14 @@ void Map::genMap()
     for( int row = (shopsYCord - 5); row < shopsYCord; row++ )
     {
         for( int col = 0; col < shopsXCord; col++ )
-        {
+       {
             // I will switch all grass to concrete for the shop
-            if( map[row][col] == TileType::Grass )
+            if( map[row][col] == TileType::Grass || map[row][col] == TileType::Tree)
                 map[row][col] = TileType::Concrete;
         }
     }
 
-    map[shopsYCord-5][8] = TileType::Mill;
+    map[shopsYCord][8] = TileType::Mill;
 
 }
 
@@ -138,7 +138,19 @@ void Map::render(SDL_Renderer *renderer)
                     break;
                 
                 case TileType::Mill:
+                    // render a grass block first
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Grass], NULL, &dstRect ); // note asset name for array coming from Assets.h
+
+                    // render workshop on top of concrete
+                    dstRect.y = (renderingY - 5) * GameSettings::tileHeight;
+                    dstRect.h = GameSettings::tileHeight * 5;
+                    dstRect.w = GameSettings::tileWidth * 5;
                     SDL_RenderTexture( renderer, mapTextureArray[asset_Mill], NULL, &dstRect );
+
+                    //reset destRect back
+                    dstRect.h = GameSettings::tileHeight;
+                    dstRect.w = GameSettings::tileWidth;
+                    dstRect.y = renderingY * GameSettings::tileHeight;
                     break;
                 
             }
@@ -161,7 +173,7 @@ void Map::render(SDL_Renderer *renderer)
         }
     }
 
-    void Map::handleMouseEvent( SDL_Event &event )
+    void Map::handleMouseEvent( SDL_Event &event, bool uiIsTriggered )
     {
         if( event.type == SDL_EVENT_MOUSE_BUTTON_DOWN )
         {
@@ -174,7 +186,11 @@ void Map::render(SDL_Renderer *renderer)
             int tileX = screenX + (mouseX / GameSettings::tileWidth);
             int tileY = screenY + (mouseY / GameSettings::tileHeight);
 
-            pSelectedTile = &map[tileY][tileX];
+            if(uiIsTriggered == 0 || tileY > screenY)
+            { // you cannot click the top row of tiles while the UI is opened
+                printf("uiIsTriggered: %d\ntileY: %d\nscreenY: %d\n", uiIsTriggered, tileY, screenY);
+                pSelectedTile = &map[tileY][tileX];
+            }
         }
     }
 
@@ -191,6 +207,7 @@ void Map::render(SDL_Renderer *renderer)
                         screenY--;
                     }
                     break;
+
                 case SDLK_S:
                     if(screenY < (GameSettings::mapHeight) )
                     {
@@ -198,6 +215,7 @@ void Map::render(SDL_Renderer *renderer)
                         screenY++;
                     }
                     break;
+
                 case SDLK_D:
                     if(screenX < GameSettings::mapWidth)
                     {
@@ -205,12 +223,20 @@ void Map::render(SDL_Renderer *renderer)
                         screenX++;
                     }
                     break;
+
                 case SDLK_A:
                     if(screenX > 0)
                     {
                         cameraX--;
                         screenX--;
                     }
+                    break;
+
+                case SDLK_R:
+                    cameraX = GameSettings::windowTileWidthCount / 2; // start to the far left
+                    cameraY = GameSettings::mapHeight / 2;
+                    screenX = cameraX - (GameSettings::windowTileWidthCount / 2);
+                    screenY = cameraY - (GameSettings::windowTileHeightCount / 2);
                     break;
             }
         }

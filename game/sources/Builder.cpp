@@ -70,8 +70,8 @@ void Builder::buildItem()
         return;
     } else
     {
-        if( mode == BuildMode::ROAD && pGameMap->getSelectedTile() != nullptr )
-        {
+        if( mode == BuildMode::ROAD && *pGameMap->getSelectedTile() == TileType::Grass )
+        { // I can only build roads on grass blocks
             *pGameMap->getSelectedTile() = TileType::Road;
             pGameMap->deselectTile();
         }
