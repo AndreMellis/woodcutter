@@ -34,6 +34,8 @@ public:
     void renderUI(SDL_Renderer *renderer);
     void handleEvent(SDL_Event &event);
     void buildItem(); // if in build mode and tile is selected, build it
+
+    bool uiIsTriggered() { return uiIsShowing; }
 };
 
 #endif

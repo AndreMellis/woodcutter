@@ -72,7 +72,7 @@ void Builder::buildItem()
     {
         if( mode == BuildMode::ROAD && pGameMap->getSelectedTile() != nullptr )
         {
-            *pGameMap->getSelectedTile() = TileType::ROAD;
+            *pGameMap->getSelectedTile() = TileType::Road;
             pGameMap->deselectTile();
         }
     }

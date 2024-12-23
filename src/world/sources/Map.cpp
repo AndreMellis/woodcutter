@@ -1,4 +1,5 @@
 #include "Map.h"
+#include <cstdio>
 
 Map *Map::pInstance = 0;
 
@@ -15,8 +16,8 @@ Map::Map()
 {
     pSelectedTile = nullptr;
 
-    // center camera on map
-    cameraX = GameSettings::mapWidth / 2;
+    // start camera on far left middle
+    cameraX = GameSettings::windowTileWidthCount / 2; // start to the far left
     cameraY = GameSettings::mapHeight / 2;
 
     screenX = cameraX - (GameSettings::windowTileWidthCount / 2);
@@ -29,30 +30,70 @@ void Map::genMap()
     {
         for( int col = 0; col < GameSettings::mapWidth; col++ )
         {
-            int randomTileType = rand() % asset_AssetCount;
-
-            switch(randomTileType)
-            {
-                case 0:
-                    map[row][col] = TileType::Grass;
-                    break;
-                case 1:
+            if(row < 3 || row > (GameSettings::mapHeight - 3) || col < 3 || col > (GameSettings::mapWidth - 3) )
+            { // all water perim
+                map[row][col] = TileType::Water;
+            } else if(row < 8 || row > (GameSettings::mapHeight - 8) || col < 8 || col > (GameSettings::mapWidth - 8))
+            { // fade to grass
+                int randNum = 1 + (rand() % 4); // number 1-4
+                if(randNum <=3)
+                {
                     map[row][col] = TileType::Water;
-                    break;
+                } else
+                {
+                    map[row][col] = TileType::Grass;
+                }
+            } else if(row < 25 || row > (GameSettings::mapHeight - 25) || col < 25 || col > (GameSettings::mapWidth - 25))
+            { // fade in trees
+                int randNum = 1 + (rand() % 20); // number 1-4
+                if(randNum <=1)
+                {
+                    map[row][col] = TileType::Tree;
+                } else
+                {
+                    map[row][col] = TileType::Grass;
+                }
+            } else
+            { // we are inland
+                int randNum = 1 + (rand() % 20); // number 1-5
+                if(randNum <= 8)
+                {
+                    map[row][col] = TileType::Tree;
+                } else
+                {
+                    map[row][col] = TileType::Grass;
+                }
             }
         }
     }
+
+    // now that the map is random, lets add our shop
+    int shopsXCord = 13;
+    int shopsYCord = GameSettings::mapHeight / 2;
+
+    for( int row = (shopsYCord - 5); row < shopsYCord; row++ )
+    {
+        for( int col = 0; col < shopsXCord; col++ )
+        {
+            // I will switch all grass to concrete for the shop
+            if( map[row][col] == TileType::Grass )
+                map[row][col] = TileType::Concrete;
+        }
+    }
+
+    map[shopsYCord-5][8] = TileType::Mill;
+
 }
 
 void Map::render(SDL_Renderer *renderer)
 {
     int endingRow = cameraY + ( GameSettings::windowTileHeightCount / 2 );
-    if(endingRow > GameSettings::mapHeight)
-        endingRow = GameSettings::mapHeight;
+    if(endingRow >= GameSettings::mapHeight)
+        endingRow = GameSettings::mapHeight - 1;
 
     int endingCol = cameraX + ( GameSettings::windowTileWidthCount / 2);
-    if(endingCol > GameSettings::mapWidth)
-        endingCol = GameSettings::mapWidth;
+    if(endingCol >= GameSettings::mapWidth)
+        endingCol = GameSettings::mapWidth - 1;
 
     SDL_FRect dstRect;
     dstRect.x = 0;
@@ -62,7 +103,7 @@ void Map::render(SDL_Renderer *renderer)
 
     float renderingX = 0;
     float renderingY = 0;
-    
+
     for(int row = screenY; row < endingRow; row++ )
     {
         dstRect.y = renderingY * GameSettings::tileHeight;
@@ -71,20 +112,35 @@ void Map::render(SDL_Renderer *renderer)
         for( int col = screenX; col < endingCol; col++ )
         {
             dstRect.x = renderingX * GameSettings::tileWidth;
+            SDL_FRect treeRect = { dstRect.x, (dstRect.y - GameSettings::tileHeight), GameSettings::tileWidth, GameSettings::tileHeight*2 }; // specifically for rendering trees
 
             switch( map[row][col] )
             {
+                case TileType::Tree:
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Grass], NULL, &dstRect ); // note asset name for array coming from Assets.h
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Tree], NULL, &treeRect);
+                    break;
+
                 case TileType::Grass:
                     SDL_RenderTexture( renderer, mapTextureArray[asset_Grass], NULL, &dstRect ); // note asset name for array coming from Assets.h
                     break;
 
+                case TileType::Road:
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Dirt], NULL, &dstRect );
+                    break;
+                
                 case TileType::Water:
                     SDL_RenderTexture( renderer, mapTextureArray[asset_Water], NULL, &dstRect ); // note asset name for array coming from Assets.h
                     break;
                 
-                case TileType::ROAD:
-                    SDL_RenderTexture( renderer, mapTextureArray[asset_Dirt], NULL, &dstRect );
+                case TileType::Concrete:
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Concrete], NULL, &dstRect );
                     break;
+                
+                case TileType::Mill:
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Mill], NULL, &dstRect );
+                    break;
+                
             }
 
             if( pSelectedTile == &map[row][col] )  // does the pointer to the selcted tile match the mem addr of this tile
@@ -101,52 +157,71 @@ void Map::render(SDL_Renderer *renderer)
             renderingX = renderingX + 1.00;
         }
 
-        renderingY = renderingY + 1.00;
-    }
-}
-
-void Map::handleEvent( SDL_Event &event )
-{
-    if( event.type == SDL_EVENT_MOUSE_BUTTON_DOWN )
-    {
-        // get the tile the user clicked
-        float mouseX;
-        float mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-
-        // update pointer
-        int tileX = screenX + (mouseX / GameSettings::tileWidth);
-        int tileY = screenY + (mouseY / GameSettings::tileHeight);
-
-        pSelectedTile = &map[tileY][tileX];
-
-    } else if (event.type == SDL_EVENT_KEY_DOWN)
-    {
-        switch( event.key.key )
-        {
-            case SDLK_W:
-                cameraY--;
-                screenY--;
-                break;
-            case SDLK_S:
-                cameraY++;
-                screenY++;
-                break;
-            case SDLK_D:
-                cameraX++;
-                screenX++;
-                break;
-            case SDLK_A:
-                cameraX--;
-                screenX--;
-                break;
+            renderingY = renderingY + 1.00;
         }
     }
-}
+
+    void Map::handleMouseEvent( SDL_Event &event )
+    {
+        if( event.type == SDL_EVENT_MOUSE_BUTTON_DOWN )
+        {
+            // get the tile the user clicked
+            float mouseX;
+            float mouseY;
+            SDL_GetMouseState(&mouseX, &mouseY);
+
+            // update pointer
+            int tileX = screenX + (mouseX / GameSettings::tileWidth);
+            int tileY = screenY + (mouseY / GameSettings::tileHeight);
+
+            pSelectedTile = &map[tileY][tileX];
+        }
+    }
+
+    void Map::handleKeyboardEvent( SDL_Event &event )
+    {
+        if (event.type == SDL_EVENT_KEY_DOWN)
+        {
+            switch( event.key.key )
+            {
+                case SDLK_W:
+                    if(screenY > 0)
+                    { // we can't go negative
+                        cameraY--;
+                        screenY--;
+                    }
+                    break;
+                case SDLK_S:
+                    if(screenY < (GameSettings::mapHeight) )
+                    {
+                        cameraY++;
+                        screenY++;
+                    }
+                    break;
+                case SDLK_D:
+                    if(screenX < GameSettings::mapWidth)
+                    {
+                        cameraX++;
+                        screenX++;
+                    }
+                    break;
+                case SDLK_A:
+                    if(screenX > 0)
+                    {
+                        cameraX--;
+                        screenX--;
+                    }
+                    break;
+            }
+        }
+    }
 
 void Map::loadAssets(SDL_Renderer *renderer)
 {
     mapTextureArray[asset_Grass] = TextureHandler::makeTexture("assets/terrain/grass.png", renderer);
     mapTextureArray[asset_Water] = TextureHandler::makeTexture("assets/terrain/water.png", renderer);
     mapTextureArray[asset_Dirt] = TextureHandler::makeTexture("assets/terrain/dirt.png", renderer);
+    mapTextureArray[asset_Concrete] = TextureHandler::makeTexture("assets/terrain/concrete.png", renderer);
+    mapTextureArray[asset_Tree] = TextureHandler::makeTexture("assets/fauna/tree.png", renderer);
+    mapTextureArray[asset_Mill] = TextureHandler::makeTexture("assets/buildings/sawmill.png", renderer);
 }

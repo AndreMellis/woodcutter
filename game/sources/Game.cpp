@@ -70,7 +70,8 @@ void Game::run()
             } else
             {
                 builder.handleEvent(event);
-                pGameMap->handleEvent(event);
+                pGameMap->handleKeyboardEvent(event);
+                pGameMap->handleMouseEvent(event);
             }
         }
         if( !running )

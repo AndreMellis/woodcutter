@@ -8,7 +8,10 @@ enum class TileType
 {
     Grass,
     Water,
-    ROAD,
+    Road,
+    Tree,
+    Concrete,
+    Mill,
     Empty
 };
 

@@ -34,7 +34,8 @@ public:
     void loadAssets(SDL_Renderer *renderer); // loads all assets to array
 
     void render(SDL_Renderer *renderer);
-    void handleEvent(SDL_Event &event);
+    void handleKeyboardEvent(SDL_Event &event);
+    void handleMouseEvent(SDL_Event &event);
 
     void deselectTile() { pSelectedTile = nullptr; }
     TileType *getSelectedTile() { return pSelectedTile; }
