@@ -35,7 +35,7 @@ public:
 
     void render(SDL_Renderer *renderer);
     void handleKeyboardEvent(SDL_Event &event);
-    void handleMouseEvent(SDL_Event &event, bool uiIsTriggered);
+    void handleMouseEvent(SDL_Event &event, bool buildUIIsTriggered);
 
     void deselectTile() { pSelectedTile = nullptr; }
     TileType *getSelectedTile() { return pSelectedTile; }

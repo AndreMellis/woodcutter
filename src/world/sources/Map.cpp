@@ -1,5 +1,4 @@
 #include "Map.h"
-#include <cstdio>
 
 Map *Map::pInstance = 0;
 
@@ -173,7 +172,7 @@ void Map::render(SDL_Renderer *renderer)
         }
     }
 
-    void Map::handleMouseEvent( SDL_Event &event, bool uiIsTriggered )
+    void Map::handleMouseEvent( SDL_Event &event, bool buildUIIsTriggered )
     {
         if( event.type == SDL_EVENT_MOUSE_BUTTON_DOWN )
         {
@@ -186,9 +185,8 @@ void Map::render(SDL_Renderer *renderer)
             int tileX = screenX + (mouseX / GameSettings::tileWidth);
             int tileY = screenY + (mouseY / GameSettings::tileHeight);
 
-            if(uiIsTriggered == 0 || tileY > screenY)
+            if(buildUIIsTriggered == 0 || tileY > screenY)
             { // you cannot click the top row of tiles while the UI is opened
-                printf("uiIsTriggered: %d\ntileY: %d\nscreenY: %d\n", uiIsTriggered, tileY, screenY);
                 pSelectedTile = &map[tileY][tileX];
             }
         }
