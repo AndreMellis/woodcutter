@@ -80,7 +80,7 @@ void Builder::buildItem()
             &&
             pGameMap->getBaseMapTileType(selectedXTile, selectedYTile) == TileType::Grass)
         { // I can only build roads on grass blocks
-            *pGameMap->getSelectedTile() = TileType::Road;
+            pGameMap->changeBaseMapTileType(selectedXTile, selectedYTile, TileType::Road);
             pGameMap->deselectTile();
         }
     }

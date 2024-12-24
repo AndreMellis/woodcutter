@@ -33,7 +33,7 @@ std::pair<int,int> ActionHandler::getFreeNeighbor(int xInput, int yInput, int se
 
     do
     {
-        if (yInput - currentDistance < 0)
+        if (yInput - currentDistance >= 0)
         { // don't go out of bounds on the Y
             if(
                 xInput - currentDistance > 0
@@ -65,7 +65,7 @@ std::pair<int,int> ActionHandler::getFreeNeighbor(int xInput, int yInput, int se
                 {
                     return std::make_pair( xInput + currentDistance, yInput - currentDistance );
                 } 
-        } else if ( yInput + currentDistance >= GameSettings::mapHeight)
+        } else if ( yInput + currentDistance < GameSettings::mapHeight)
         { // don't go out of bounds on the Y
             if(
                 xInput + currentDistance < GameSettings::mapWidth
@@ -157,6 +157,7 @@ std::pair<int,int> ActionHandler::getEmptyTileNextToRoad(int xInput, int yInput,
                 )
                 {
                     returnMe = getFreeNeighbor( xInput, yInput - currentDistance, 1);
+                    printf("I found the road below me\n");
                     if( returnMe.first >= 0 && returnMe.second >= 0 )
                         return returnMe;
                 } 
