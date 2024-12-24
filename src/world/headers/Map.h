@@ -12,11 +12,15 @@
 class Map
 {
 private:
-    TileType map[GameSettings::mapHeight][GameSettings::mapWidth];
-    TileType *pSelectedTile; // the tile currently clicked on the map to render special
+    TileType baseMap[GameSettings::mapHeight][GameSettings::mapWidth];
+    TileType objectMap[GameSettings::mapHeight][GameSettings::mapWidth];
     static Map *pInstance;
 
     SDL_Texture *mapTextureArray[asset_AssetCount];
+
+    TileType *pSelectedTile; // the tile currently clicked on the map to render special
+    int selectedXIndex; // index of the currently selected tile
+    int selectedYIndex; // index of the currently selected tile
 
     // we want to center camera on middle of map
     int cameraX;
@@ -37,8 +41,14 @@ public:
     void handleKeyboardEvent(SDL_Event &event);
     void handleMouseEvent(SDL_Event &event, bool uiIsTriggered);
 
-    void deselectTile() { pSelectedTile = nullptr; }
+    void deselectTile();
     TileType *getSelectedTile() { return pSelectedTile; }
+
+    TileType getBaseMapTileType(int x, int y) { return baseMap[y][x]; }
+    TileType getObjectMapTileType(int x, int y) { return objectMap[y][x]; }
+
+    int getSelectedXIndex() { return selectedXIndex; }
+    int getSelectedYIndex() { return selectedYIndex; }
 };
 
 #endif

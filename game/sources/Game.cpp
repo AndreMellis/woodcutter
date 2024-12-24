@@ -5,6 +5,13 @@ Game::Game()
     renderer = nullptr;
     window = nullptr;
     pGameMap = Map::getInstance();
+    
+    inventory.wood = 0;
+    inventory.totalEmployees = 1; // you start the game alone
+    inventory.idleEmployees = 1;
+    inventory.money = 9999; // a lot of money for testing
+
+    actionHandler.init( &inventory );
 }
 
 bool Game::init()
