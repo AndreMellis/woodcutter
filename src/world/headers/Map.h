@@ -46,9 +46,12 @@ public:
 
     TileType getBaseMapTileType(int x, int y) { return baseMap[y][x]; }
     TileType getObjectMapTileType(int x, int y) { return objectMap[y][x]; }
+    void changeBaseMapTileType(int x, int y, TileType newType) { baseMap[y][x] = newType; }
+    void changeObjectMapTileType(int x, int y, TileType newType) { objectMap[y][x] = newType; }
 
     int getSelectedXIndex() { return selectedXIndex; }
     int getSelectedYIndex() { return selectedYIndex; }
+
 };
 
 #endif

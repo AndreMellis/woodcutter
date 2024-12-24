@@ -6,6 +6,7 @@
 #include "Inventory.h"
 #include "GameSettings.h"
 #include "Map.h"
+#include "Tile.h"
 
 class ActionHandler
 {
@@ -13,8 +14,10 @@ private:
     Inventory *pGameInventory;
     Map *pGameMap;
 
+    const int maxRoadDistFromTree = 4; // how far we will look for roads away from trees
+
     std::pair<int,int> getFreeNeighbor(int xInput, int yInput, int searchDistance); 
-    std::pair<int,int> getNeighoringRoad(int xInput, int yInput, int searchDistance); // returns the index of the road closest to the given cords
+    std::pair<int,int> getEmptyTileNextToRoad(int xInput, int yInput, int searchDistance); // returns the index of the road closest to the given cords
 
     void harvestTree();
 

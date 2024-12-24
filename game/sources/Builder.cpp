@@ -60,6 +60,7 @@ void Builder::handleClick(float mouseX, float mouseY)
     {
         // I clicked on the road
         mode = BuildMode::ROAD;
+        pGameMap->deselectTile();
     }
 }
 
@@ -70,7 +71,14 @@ void Builder::buildItem()
         return;
     } else
     {
-        if( mode == BuildMode::ROAD && *pGameMap->getSelectedTile() == TileType::Grass )
+        int selectedXTile = pGameMap->getSelectedXIndex();
+        int selectedYTile = pGameMap->getSelectedYIndex();
+
+        if( mode == BuildMode::ROAD 
+            && 
+            pGameMap->getObjectMapTileType(selectedXTile, selectedYTile) == TileType::Empty
+            &&
+            pGameMap->getBaseMapTileType(selectedXTile, selectedYTile) == TileType::Grass)
         { // I can only build roads on grass blocks
             *pGameMap->getSelectedTile() = TileType::Road;
             pGameMap->deselectTile();

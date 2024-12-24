@@ -79,6 +79,7 @@ void Game::run()
                 builder.handleEvent(event);
                 pGameMap->handleKeyboardEvent(event);
                 pGameMap->handleMouseEvent(event, builder.uiIsTriggered());
+                actionHandler.handleEvent(event);
             }
         }
         if( !running )

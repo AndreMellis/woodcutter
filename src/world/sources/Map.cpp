@@ -179,7 +179,6 @@ void Map::render(SDL_Renderer *renderer)
             switch(objectMap[row][col])
             {
                 case TileType::Tree:
-                    SDL_RenderTexture( renderer, mapTextureArray[asset_Grass], NULL, &dstRect ); // note asset name for array coming from Assets.h
                     SDL_RenderTexture( renderer, mapTextureArray[asset_Tree], NULL, &treeRect);
                     break;
 
@@ -201,6 +200,10 @@ void Map::render(SDL_Renderer *renderer)
                     dstRect.h = GameSettings::tileHeight;
                     dstRect.w = GameSettings::tileWidth;
                     dstRect.y = renderingY * GameSettings::tileHeight;
+                    break;
+                
+                case TileType::UnclaimedLumber:
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_UnclaimedLumber], NULL, &dstRect ); // note asset name for array coming from Assets.h
                     break;
             }
 
@@ -226,7 +229,6 @@ void Map::handleMouseEvent( SDL_Event &event, bool uiIsTriggered )
 
         if(uiIsTriggered == 0 || tileY > screenY)
         { // you cannot click the top row of tiles while the UI is opened
-            printf("uiIsTriggered: %d\ntileY: %d\nscreenY: %d\n", uiIsTriggered, tileY, screenY);
             pSelectedTile = &baseMap[tileY][tileX];
             selectedXIndex = tileX;
             selectedYIndex = tileY;
