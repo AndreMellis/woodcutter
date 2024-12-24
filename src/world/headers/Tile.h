@@ -10,8 +10,10 @@ enum class TileType
     Water,
     Road,
     Tree,
+    Stump,
     Concrete,
     Mill,
+    UnclaimedLumber,
     Empty
 };
 

@@ -13,6 +13,8 @@
 #include "GameSettings.h"
 #include "Map.h"
 #include "Builder.h"
+#include "Inventory.h"
+#include "ActionHandler.h"
 
 class Game
 {
@@ -21,6 +23,8 @@ private:
     SDL_Window *window;
     Map *pGameMap;
     Builder builder;
+    Inventory inventory;
+    ActionHandler actionHandler;
 
     bool loadAssets(); // loads all assets into the array
 

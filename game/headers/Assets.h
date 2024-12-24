@@ -10,7 +10,9 @@ enum assetNames
     asset_Dirt,
     asset_Concrete,
     asset_Tree,
+    asset_Stump,
     asset_Mill,
+    asset_UnclaimedLumber,
     asset_AssetCount
 };
 
