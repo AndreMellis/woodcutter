@@ -103,7 +103,7 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
 
     auto heuristic = [distance](Node* a, Node* b)
     { // the "as the crow flies" distance between a and b
-        return std::distance(a, b);
+        return distance(a, b);
     };
 
     // set the start node up
