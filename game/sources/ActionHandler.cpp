@@ -267,11 +267,6 @@ void ActionHandler::harvestTree()
          * COME RECODE ME
         */
         std::vector< std::pair<int, int> > pathToTake = aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
-        printf("pathToTake is size %d\n", pathToTake.size());
-        for( int i = 0; i < pathToTake.size(); i++ )
-        {
-            printf("pathToTake[%d] is X: %d Y: %d\n", i, pathToTake[i].first, pathToTake[i].second);
-        }
 
 
 

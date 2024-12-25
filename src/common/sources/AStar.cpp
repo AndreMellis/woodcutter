@@ -131,11 +131,14 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
         nodeCurrent = listNotTestedNodes.front();
         nodeCurrent->bHasBeenVisited = 1;
 
+        int i = 0;
+        printf("about to go into the for loop with current node [%d][%d]\n", nodeCurrent->y, nodeCurrent->x );
         for( auto nodeNeighbor : nodeCurrent->vecNeighbors )
         { // if the node hasn't been visited and is not an obstacle. add it to the test list
             if( !nodeNeighbor->bHasBeenVisited && nodeNeighbor->bIsObstacle == 0)
                 listNotTestedNodes.push_back(nodeNeighbor);
 
+            printf("looking at neighbor %d\n", i);
             float fPossiblyLowerGoal = nodeCurrent->fLocalGoal + distance(nodeCurrent, nodeNeighbor);
             if( fPossiblyLowerGoal < nodeNeighbor->fLocalGoal )
             {
@@ -145,22 +148,20 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
                 // the best path to the nieghbor has changed, so update the neighbor score
                 nodeNeighbor->fGlobalGoal = nodeNeighbor->fLocalGoal + heuristic(nodeNeighbor, endNode);
             }
-        }
-
-        if(nodeCurrent->x == endNode->x && nodeCurrent->y == endNode->y)
-        {
-            printf("Found!\n");
-            found = 1;
+            i++;
         }
     }
 
+    printf("Solution found\n");
     Node *p = endNode;
+    printf("endNode is [%d][%d]\n", endNode->y, endNode->x);
     while(p->parentNode != nullptr)
     {
         int parentX = p->parentNode->x;
         int parentY = p->parentNode->y;
 
         pathToTake.push_back( std::make_pair( parentX, parentY ) );
+        printf("node [%d][%d] added to the return\n", parentY, parentX);
 
         p = p->parentNode;
     }
