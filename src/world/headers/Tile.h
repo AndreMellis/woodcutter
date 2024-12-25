@@ -14,6 +14,7 @@ enum class TileType
     Concrete,
     Mill,
     UnclaimedLumber,
+    Worker,
     Empty
 };
 

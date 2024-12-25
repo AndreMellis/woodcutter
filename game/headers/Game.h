@@ -15,6 +15,7 @@
 #include "Builder.h"
 #include "Inventory.h"
 #include "ActionHandler.h"
+#include "AStar.h"
 
 class Game
 {

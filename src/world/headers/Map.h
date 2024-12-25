@@ -51,7 +51,6 @@ public:
 
     int getSelectedXIndex() { return selectedXIndex; }
     int getSelectedYIndex() { return selectedYIndex; }
-
 };
 
 #endif
