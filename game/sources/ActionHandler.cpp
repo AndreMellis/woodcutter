@@ -157,7 +157,6 @@ std::pair<int,int> ActionHandler::getEmptyTileNextToRoad(int xInput, int yInput,
                 )
                 {
                     returnMe = getFreeNeighbor( xInput, yInput - currentDistance, 1);
-                    printf("I found the road below me\n");
                     if( returnMe.first >= 0 && returnMe.second >= 0 )
                         return returnMe;
                 } 
@@ -267,7 +266,14 @@ void ActionHandler::harvestTree()
          * INJECTING ASTAR HERE
          * COME RECODE ME
         */
-        aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
+        std::vector< std::pair<int, int> > pathToTake = aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
+        printf("pathToTake is size %d\n", pathToTake.size());
+        for( int i = 0; i < pathToTake.size(); i++ )
+        {
+            printf("pathToTake[%d] is X: %d Y: %d\n", i, pathToTake[i].first, pathToTake[i].second);
+        }
+
+
 
         // now that we know we can place the lumber, let's do it
         pGameMap->changeObjectMapTileType(selectedXTile, selectedYTile, TileType::Stump);

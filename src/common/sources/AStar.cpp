@@ -65,7 +65,6 @@ void AStar::updateNodeMap()
                 arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row][col + 1] );
         }
     }
-    printf("Node[100][8] has %d neighbors\n", arrNodeMap[100][8].vecNeighbors.size());
 }
 
 void AStar::unvisitAllNodes()
@@ -88,8 +87,6 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
 
     // the nodes we start and end with
     Node *startNode = &arrNodeMap[startY][startX];
-    printf("startNode is arrNodeMap[%d][%d]\n", startY, startX);
-    printf("startNode has %d neighbors\n", startNode->vecNeighbors.size());
     Node *endNode = &arrNodeMap[endY][endX];
 
     /*
@@ -118,35 +115,43 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
     std::list<Node*> listNotTestedNodes;
     listNotTestedNodes.push_back(startNode);
 
+    bool found = 0;
     // main meat and potatoes
-    while( !listNotTestedNodes.empty() && nodeCurrent != endNode )
+    while( !listNotTestedNodes.empty() && nodeCurrent != endNode && !found )
+    //while( !listNotTestedNodes.empty() && nodeCurrent->x != endNode->x && nodeCurrent->y != endNode->y )
     { // while there are nodes to test
         listNotTestedNodes.sort([](const Node* lhs, const Node* rhs){return lhs->fGlobalGoal < rhs->fGlobalGoal; }); //ion know anymore.. a smallest to largest sort
 
-            while( !listNotTestedNodes.empty() && listNotTestedNodes.front()->bHasBeenVisited) // we already visited the first item in the list
-                listNotTestedNodes.pop_front();
+        while( !listNotTestedNodes.empty() && listNotTestedNodes.front()->bHasBeenVisited) // we already visited the first item in the list
+            listNotTestedNodes.pop_front();
 
-            if(listNotTestedNodes.empty()) // if we emptied the whole list from step above. break out func
-                break; 
-            
-            nodeCurrent = listNotTestedNodes.front();
-            nodeCurrent->bHasBeenVisited = 1;
+        if(listNotTestedNodes.empty()) // if we emptied the whole list from step above. break out func
+            break; 
+        
+        nodeCurrent = listNotTestedNodes.front();
+        nodeCurrent->bHasBeenVisited = 1;
 
-            for( auto nodeNeighbor : nodeCurrent->vecNeighbors )
-            { // if the node hasn't been visited and is not an obstacle. add it to the test list
-                if( !nodeNeighbor->bHasBeenVisited && nodeNeighbor->bIsObstacle == 0)
-                    listNotTestedNodes.push_back(nodeNeighbor);
+        for( auto nodeNeighbor : nodeCurrent->vecNeighbors )
+        { // if the node hasn't been visited and is not an obstacle. add it to the test list
+            if( !nodeNeighbor->bHasBeenVisited && nodeNeighbor->bIsObstacle == 0)
+                listNotTestedNodes.push_back(nodeNeighbor);
 
-                float fPossiblyLowerGoal = nodeCurrent->fLocalGoal + distance(nodeCurrent, nodeNeighbor);
-                if( fPossiblyLowerGoal < nodeNeighbor->fLocalGoal )
-                {
-                    nodeNeighbor->parentNode = nodeCurrent;
-                    nodeNeighbor->fLocalGoal = fPossiblyLowerGoal;
+            float fPossiblyLowerGoal = nodeCurrent->fLocalGoal + distance(nodeCurrent, nodeNeighbor);
+            if( fPossiblyLowerGoal < nodeNeighbor->fLocalGoal )
+            {
+                nodeNeighbor->parentNode = nodeCurrent;
+                nodeNeighbor->fLocalGoal = fPossiblyLowerGoal;
 
-                    // the best path to the nieghbor has changed, so update the neighbor score
-                    nodeNeighbor->fGlobalGoal = nodeNeighbor->fLocalGoal + heuristic(nodeNeighbor, endNode);
-                }
+                // the best path to the nieghbor has changed, so update the neighbor score
+                nodeNeighbor->fGlobalGoal = nodeNeighbor->fLocalGoal + heuristic(nodeNeighbor, endNode);
             }
+        }
+
+        if(nodeCurrent->x == endNode->x && nodeCurrent->y == endNode->y)
+        {
+            printf("Found!\n");
+            found = 1;
+        }
     }
 
     Node *p = endNode;
