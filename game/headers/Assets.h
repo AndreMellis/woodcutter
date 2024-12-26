@@ -13,6 +13,7 @@ enum assetNames
     asset_Stump,
     asset_Mill,
     asset_UnclaimedLumber,
+    asset_Worker,
     asset_AssetCount
 };
 

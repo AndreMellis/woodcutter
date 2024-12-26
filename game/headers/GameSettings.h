@@ -14,6 +14,9 @@ struct GameSettings
 
     constexpr static int windowTileWidthCount = windowWidth / tileWidth;
     constexpr static int windowTileHeightCount = windowHeight / tileHeight;
+
+    constexpr static int millXLocation = 13;
+    constexpr static int millYLocation = mapHeight / 2;
 };
 
 #endif

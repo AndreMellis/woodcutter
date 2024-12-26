@@ -76,8 +76,8 @@ void Map::genMap()
     }
 
     // now that the map is random, lets add our shop
-    int shopsXCord = 13;
-    int shopsYCord = GameSettings::mapHeight / 2;
+    int shopsXCord = GameSettings::millXLocation;
+    int shopsYCord = GameSettings::millYLocation;
 
     for( int row = (shopsYCord - 5); row < shopsYCord; row++ )
     {
@@ -204,6 +204,10 @@ void Map::render(SDL_Renderer *renderer)
                 case TileType::UnclaimedLumber:
                     SDL_RenderTexture( renderer, mapTextureArray[asset_UnclaimedLumber], NULL, &dstRect ); // note asset name for array coming from Assets.h
                     break;
+                
+                case TileType::Worker:
+                    SDL_RenderTexture( renderer, mapTextureArray[asset_Worker], NULL, &dstRect ); // note asset name for array coming from Assets.h
+                    break;
             }
 
             renderingX = renderingX + 1.00;
@@ -296,6 +300,7 @@ void Map::loadAssets(SDL_Renderer *renderer)
     mapTextureArray[asset_Tree] = TextureHandler::makeTexture("assets/fauna/tree.png", renderer);
     mapTextureArray[asset_Mill] = TextureHandler::makeTexture("assets/buildings/sawmill.png", renderer);
     mapTextureArray[asset_UnclaimedLumber] = TextureHandler::makeTexture("assets/objects/lumberPile.png", renderer);
+    mapTextureArray[asset_Worker] = TextureHandler::makeTexture("assets/characters/worker.png", renderer);
 }
 
 void Map::deselectTile()

@@ -18,6 +18,8 @@ set(SOURCES
     game/sources/Builder.cpp
     game/sources/Game.cpp
     game/sources/Actions.cpp
+    game/sources/ActionHandler.cpp
+    game/sources/WorkerCharacter.cpp
     src/common/sources/TextureHandler.cpp
     src/common/sources/AStar.cpp
     src/world/sources/Map.cpp)

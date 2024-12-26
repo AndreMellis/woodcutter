@@ -151,6 +151,9 @@ std::stack< std::pair<int, int> > AStar::findPath( int startX, int startY, int e
     }
 
     Node *p = endNode;
+    if(p->parentNode != nullptr) // we have to add the first item
+        pathToTake.push( std::make_pair( p->x, p->y ) );
+
     while(p->parentNode != nullptr)
     {
         int parentX = p->parentNode->x;

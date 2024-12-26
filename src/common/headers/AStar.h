@@ -38,9 +38,7 @@ public:
     void updateNodeMap(); // updates the node map, changing all parents to null and updating obsticals from the game
 
     /*
-     * we will return a vector of pairs that are the X, Y cords of the map
-     * so pathToTake[0].first would be the first tile's x
-     *    pathToTake[0].second would be the first tile's y
+     * we will return a stack of pairs that are the X, Y cords of the map
     */
     std::stack < std::pair<int, int> > findPath( int startX, int startY, int endX, int endY);
 };

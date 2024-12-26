@@ -5,23 +5,6 @@ Actions::Actions()
     pGameMap = Map::getInstance();
 }
 
-void Actions::init(Inventory *pGameInv)
-{
-    pGameInventory = pGameInv;
-}
-
-void Actions::handleEvent(SDL_Event &event)
-{
-        if (event.type == SDL_EVENT_KEY_DOWN)
-        {
-            switch( event.key.key )
-            {
-                case SDLK_H:
-                    harvestTree();
-                    break;
-            }
-        }
-}
 
 std::pair<int,int> Actions::getFreeNeighbor(int xInput, int yInput, int searchDistance)
 {
@@ -235,48 +218,25 @@ std::pair<int,int> Actions::getEmptyTileNextToRoad(int xInput, int yInput, int s
     return std::make_pair(-1, -1); // return -1,-1 if no free neighbor found
 }
 
-void Actions::harvestTree()
+void Actions::harvestTree(int inputXLocation, int inputYLocation)
 {
-    int selectedXTile = pGameMap->getSelectedXIndex();
-    int selectedYTile = pGameMap->getSelectedYIndex();
-    std::pair<int, int> whereToPlaceLumber;
+    std::pair<int, int> whereToPlaceLumber = std::make_pair( -1, -1 );
 
-    if( selectedXTile < 0 || selectedYTile < 0 || pGameInventory->idleEmployees < 1 )
-    { // we don't have manpower, or a tree isn't selected
+    // first let's look for a road
+    whereToPlaceLumber = getEmptyTileNextToRoad(inputXLocation, inputYLocation, maxRoadDistFromTree);
 
-        return;
-    } else if ( pGameMap->getObjectMapTileType( selectedXTile, selectedYTile ) == TileType::Tree )
-    { // we are selecting a tree
-
-        // first let's look for a road
-        whereToPlaceLumber = getEmptyTileNextToRoad(selectedXTile, selectedYTile, maxRoadDistFromTree);
+    if( whereToPlaceLumber.first < 0 || whereToPlaceLumber.second < 0 )
+    { // a road wasn't found, so we will just drop it on the ground
+        whereToPlaceLumber = getFreeNeighbor( inputXLocation, inputYLocation, maxRoadDistFromTree );
 
         if( whereToPlaceLumber.first < 0 || whereToPlaceLumber.second < 0 )
-        { // a road wasn't found, so we will just drop it on the ground
-            whereToPlaceLumber = getFreeNeighbor( selectedXTile, selectedYTile, maxRoadDistFromTree );
-
-            if( whereToPlaceLumber.first < 0 || whereToPlaceLumber.second < 0 )
-            { // we just can't harvest the tree at this point
-                return;
-            }
+        { // we just can't harvest the tree at this point
+            return;
         }
-
-        /*
-         * INJECTING ASTAR HERE
-         * COME RECODE ME
-        */
-        std::stack< std::pair<int, int> > stackPathToTake = aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
-
-
-
-        // now that we know we can place the lumber, let's do it
-        pGameMap->changeObjectMapTileType(selectedXTile, selectedYTile, TileType::Stump);
-        pGameMap->changeObjectMapTileType(whereToPlaceLumber.first, whereToPlaceLumber.second, TileType::UnclaimedLumber);
     }
 
-}
-
-void Actions::step()
-{ // stuff we will do once a frame
-    aStar.updateNodeMap();
+    //std::stack< std::pair<int, int> > stackPathToTake = aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
+    // now that we know we can place the lumber, let's do it
+    pGameMap->changeObjectMapTileType(inputXLocation, inputYLocation, TileType::Stump);
+    pGameMap->changeObjectMapTileType(whereToPlaceLumber.first, whereToPlaceLumber.second, TileType::UnclaimedLumber);
 }
