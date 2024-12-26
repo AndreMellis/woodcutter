@@ -9,6 +9,7 @@
 #include <limits>
 #include <cmath>
 #include <list>
+#include <stack>
 
 class AStar
 {
@@ -41,7 +42,7 @@ public:
      * so pathToTake[0].first would be the first tile's x
      *    pathToTake[0].second would be the first tile's y
     */
-    std::vector< std::pair<int, int> > findPath( int startX, int startY, int endX, int endY);
+    std::stack < std::pair<int, int> > findPath( int startX, int startY, int endX, int endY);
 };
 
 #endif

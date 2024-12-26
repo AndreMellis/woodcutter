@@ -3,7 +3,7 @@
 
 #include <SDL3/SDL.h>
 #include <utility>
-#include <vector>
+#include <stack>
 #include "Inventory.h"
 #include "GameSettings.h"
 #include "Map.h"

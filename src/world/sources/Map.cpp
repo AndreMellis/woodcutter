@@ -1,5 +1,4 @@
 #include "Map.h"
-#include <cstdio>
 
 Map *Map::pInstance = 0;
 

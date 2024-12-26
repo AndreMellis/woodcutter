@@ -1,5 +1,4 @@
 #include "AStar.h"
-#include <cstdio>
 
 AStar::AStar()
 {
@@ -36,11 +35,11 @@ void AStar::updateNodeMap()
             // Add all the neighbors
             if(row > 0)
             { // we have a north neighbor
-                if( (col - 1) > 0 ) // we have a left neighbor
-                    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row - 1][col - 1] );
+                //if( (col - 1) > 0 ) // we have a left neighbor
+                //    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row - 1][col - 1] );
 
-                if( (col + 1) < (GameSettings::mapWidth - 1) ) // we have a right neighbor
-                    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row - 1][col + 1] );
+                //if( (col + 1) < (GameSettings::mapWidth - 1) ) // we have a right neighbor
+                //    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row - 1][col + 1] );
 
                 // we have an immediate north neighbor
                 arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row - 1][col] );
@@ -48,11 +47,11 @@ void AStar::updateNodeMap()
 
             if(row < GameSettings::mapHeight - 1)
             { // we have a southern neighbor
-                if( (col - 1) > 0 ) // we have a left neighbor
-                    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row + 1][col - 1] );
+                //if( (col - 1) > 0 ) // we have a left neighbor
+                //    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row + 1][col - 1] );
 
-                if( (col + 1) < (GameSettings::mapWidth - 1) ) // we have a right neighbor
-                    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row + 1][col + 1] );
+                //if( (col + 1) < (GameSettings::mapWidth - 1) ) // we have a right neighbor
+                //    arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row + 1][col + 1] );
 
                 // we have an immediate north neighbor
                 arrNodeMap[row][col].vecNeighbors.push_back( &arrNodeMap[row + 1][col] );
@@ -81,7 +80,7 @@ void AStar::unvisitAllNodes()
     }
 }
 
-std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int endX, int endY)
+std::stack< std::pair<int, int> > AStar::findPath( int startX, int startY, int endX, int endY)
 {
     unvisitAllNodes(); // slightly inefficient at the start, but we will always unvisit all nodes before finding a new path
 
@@ -90,11 +89,9 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
     Node *endNode = &arrNodeMap[endY][endX];
 
     /*
-     * we will return a vector of pairs that are the X, Y cords of the map
-     * so pathToTake[0].first would be the first tile's x
-     *    pathToTake[0].second would be the first tile's y
+     * we will return a stack of pairs that are the X, Y cords of the map
     */
-    std::vector< std::pair<int, int> > pathToTake;
+    std::stack< std::pair<int, int> > pathToTake;
 
     auto distance = [](Node* a, Node* b)
     { // a lambda function for pythagorean theorem???
@@ -115,9 +112,9 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
     std::list<Node*> listNotTestedNodes;
     listNotTestedNodes.push_back(startNode);
 
-    bool found = 0;
     // main meat and potatoes
-    while( !listNotTestedNodes.empty() && nodeCurrent != endNode && !found )
+    bool found = 0;
+    while( !listNotTestedNodes.empty() && !found ) 
     //while( !listNotTestedNodes.empty() && nodeCurrent->x != endNode->x && nodeCurrent->y != endNode->y )
     { // while there are nodes to test
         listNotTestedNodes.sort([](const Node* lhs, const Node* rhs){return lhs->fGlobalGoal < rhs->fGlobalGoal; }); //ion know anymore.. a smallest to largest sort
@@ -131,37 +128,35 @@ std::vector< std::pair<int, int> > AStar::findPath( int startX, int startY, int 
         nodeCurrent = listNotTestedNodes.front();
         nodeCurrent->bHasBeenVisited = 1;
 
-        int i = 0;
-        printf("about to go into the for loop with current node [%d][%d]\n", nodeCurrent->y, nodeCurrent->x );
         for( auto nodeNeighbor : nodeCurrent->vecNeighbors )
         { // if the node hasn't been visited and is not an obstacle. add it to the test list
             if( !nodeNeighbor->bHasBeenVisited && nodeNeighbor->bIsObstacle == 0)
                 listNotTestedNodes.push_back(nodeNeighbor);
 
-            printf("looking at neighbor %d\n", i);
             float fPossiblyLowerGoal = nodeCurrent->fLocalGoal + distance(nodeCurrent, nodeNeighbor);
             if( fPossiblyLowerGoal < nodeNeighbor->fLocalGoal )
             {
+                // I found a faster node
                 nodeNeighbor->parentNode = nodeCurrent;
                 nodeNeighbor->fLocalGoal = fPossiblyLowerGoal;
 
                 // the best path to the nieghbor has changed, so update the neighbor score
                 nodeNeighbor->fGlobalGoal = nodeNeighbor->fLocalGoal + heuristic(nodeNeighbor, endNode);
+                if(nodeNeighbor == endNode)
+                {
+                    found = 1;
+                }
             }
-            i++;
         }
     }
 
-    printf("Solution found\n");
     Node *p = endNode;
-    printf("endNode is [%d][%d]\n", endNode->y, endNode->x);
     while(p->parentNode != nullptr)
     {
         int parentX = p->parentNode->x;
         int parentY = p->parentNode->y;
 
-        pathToTake.push_back( std::make_pair( parentX, parentY ) );
-        printf("node [%d][%d] added to the return\n", parentY, parentX);
+        pathToTake.push( std::make_pair( parentX, parentY ) );
 
         p = p->parentNode;
     }

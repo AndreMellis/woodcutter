@@ -1,5 +1,4 @@
 #include "ActionHandler.h"
-#include <cstdio>
 
 ActionHandler::ActionHandler()
 {
@@ -266,7 +265,7 @@ void ActionHandler::harvestTree()
          * INJECTING ASTAR HERE
          * COME RECODE ME
         */
-        std::vector< std::pair<int, int> > pathToTake = aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
+        std::stack< std::pair<int, int> > stackPathToTake = aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
 
 
 
