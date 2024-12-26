@@ -1,5 +1,4 @@
 #include "ActionHandler.h"
-#include <cstdio>
 
 ActionHandler::ActionHandler()
 {
@@ -56,7 +55,7 @@ std::pair<int,int> ActionHandler::getFreeNeighbor(int xInput, int yInput, int se
                 } 
 
             if(
-                xInput + currentDistance < GameSettings::mapWidth
+                xInput + currentDistance < (GameSettings::mapWidth - 1)
                 &&
                 pGameMap->getObjectMapTileType( (xInput + currentDistance), (yInput - currentDistance) ) == TileType::Empty
                 &&
@@ -65,10 +64,10 @@ std::pair<int,int> ActionHandler::getFreeNeighbor(int xInput, int yInput, int se
                 {
                     return std::make_pair( xInput + currentDistance, yInput - currentDistance );
                 } 
-        } else if ( yInput + currentDistance < GameSettings::mapHeight)
+        } else if ( yInput + currentDistance < (GameSettings::mapHeight - 1) )
         { // don't go out of bounds on the Y
             if(
-                xInput + currentDistance < GameSettings::mapWidth
+                xInput + currentDistance < (GameSettings::mapWidth - 1)
                 &&
                 pGameMap->getObjectMapTileType( (xInput + currentDistance), (yInput + currentDistance) ) == TileType::Empty
                 &&
@@ -100,7 +99,7 @@ std::pair<int,int> ActionHandler::getFreeNeighbor(int xInput, int yInput, int se
         } else
         { // same level as Y
             if(
-                xInput + currentDistance < GameSettings::mapWidth
+                xInput + currentDistance < (GameSettings::mapWidth - 1)
                 &&
                 pGameMap->getObjectMapTileType( (xInput + currentDistance), yInput ) == TileType::Empty
                 &&
@@ -157,13 +156,12 @@ std::pair<int,int> ActionHandler::getEmptyTileNextToRoad(int xInput, int yInput,
                 )
                 {
                     returnMe = getFreeNeighbor( xInput, yInput - currentDistance, 1);
-                    printf("I found the road below me\n");
                     if( returnMe.first >= 0 && returnMe.second >= 0 )
                         return returnMe;
                 } 
 
             if(
-                xInput + currentDistance < GameSettings::mapWidth
+                xInput + currentDistance < (GameSettings::mapWidth - 1)
                 &&
                 pGameMap->getBaseMapTileType( (xInput + currentDistance), (yInput - currentDistance) ) == TileType::Road
                 )
@@ -174,10 +172,10 @@ std::pair<int,int> ActionHandler::getEmptyTileNextToRoad(int xInput, int yInput,
                 } 
         } 
 
-        if ( yInput + currentDistance < GameSettings::mapHeight)
+        if ( yInput + currentDistance < (GameSettings::mapHeight - 1) )
         { // don't go out of bounds on the Y
             if(
-                xInput + currentDistance < GameSettings::mapWidth
+                xInput + currentDistance < (GameSettings::mapWidth - 1)
                 &&
                 pGameMap->getBaseMapTileType( (xInput + currentDistance), (yInput + currentDistance) ) == TileType::Road
                 )
@@ -210,7 +208,7 @@ std::pair<int,int> ActionHandler::getEmptyTileNextToRoad(int xInput, int yInput,
 
         // same level as Y
         if(
-            xInput + currentDistance < GameSettings::mapWidth
+            xInput + currentDistance < (GameSettings::mapWidth - 1)
             &&
             pGameMap->getBaseMapTileType( (xInput + currentDistance), yInput ) == TileType::Road
             )
@@ -263,9 +261,22 @@ void ActionHandler::harvestTree()
             }
         }
 
+        /*
+         * INJECTING ASTAR HERE
+         * COME RECODE ME
+        */
+        std::stack< std::pair<int, int> > stackPathToTake = aStar.findPath( 8, GameSettings::mapHeight / 2, selectedXTile, selectedYTile );
+
+
+
         // now that we know we can place the lumber, let's do it
         pGameMap->changeObjectMapTileType(selectedXTile, selectedYTile, TileType::Stump);
         pGameMap->changeObjectMapTileType(whereToPlaceLumber.first, whereToPlaceLumber.second, TileType::UnclaimedLumber);
     }
 
+}
+
+void ActionHandler::step()
+{ // stuff we will do once a frame
+    aStar.updateNodeMap();
 }

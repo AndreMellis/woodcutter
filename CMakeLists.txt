@@ -19,6 +19,7 @@ set(SOURCES
     game/sources/Game.cpp
     game/sources/ActionHandler.cpp
     src/common/sources/TextureHandler.cpp
+    src/common/sources/AStar.cpp
     src/world/sources/Map.cpp)
 
 add_executable(woodsman.out main.cpp ${SOURCES})

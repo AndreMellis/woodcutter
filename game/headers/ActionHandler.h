@@ -3,16 +3,19 @@
 
 #include <SDL3/SDL.h>
 #include <utility>
+#include <stack>
 #include "Inventory.h"
 #include "GameSettings.h"
 #include "Map.h"
 #include "Tile.h"
+#include "AStar.h"
 
 class ActionHandler
 {
 private:
     Inventory *pGameInventory;
     Map *pGameMap;
+    AStar aStar;
 
     const int maxRoadDistFromTree = 4; // how far we will look for roads away from trees
 
@@ -26,6 +29,7 @@ public:
     void init(Inventory *pGameInv);
     
     void handleEvent(SDL_Event &event);
+    void step(); // this will handle things we do once a frame
 };
 
 #endif

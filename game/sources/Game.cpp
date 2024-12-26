@@ -87,7 +87,8 @@ void Game::run()
 
         //before rendering stuff
         builder.buildItem();
-
+        actionHandler.step();
+        
         // rerender the screen
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
         SDL_RenderClear(renderer);
