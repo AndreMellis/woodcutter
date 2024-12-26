@@ -17,7 +17,7 @@ find_package(SDL3_image REQUIRED)
 set(SOURCES 
     game/sources/Builder.cpp
     game/sources/Game.cpp
-    game/sources/ActionHandler.cpp
+    game/sources/Actions.cpp
     src/common/sources/TextureHandler.cpp
     src/common/sources/AStar.cpp
     src/world/sources/Map.cpp)

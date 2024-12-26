@@ -1,16 +1,16 @@
-#include "ActionHandler.h"
+#include "Actions.h"
 
-ActionHandler::ActionHandler()
+Actions::Actions()
 {
     pGameMap = Map::getInstance();
 }
 
-void ActionHandler::init(Inventory *pGameInv)
+void Actions::init(Inventory *pGameInv)
 {
     pGameInventory = pGameInv;
 }
 
-void ActionHandler::handleEvent(SDL_Event &event)
+void Actions::handleEvent(SDL_Event &event)
 {
         if (event.type == SDL_EVENT_KEY_DOWN)
         {
@@ -23,7 +23,7 @@ void ActionHandler::handleEvent(SDL_Event &event)
         }
 }
 
-std::pair<int,int> ActionHandler::getFreeNeighbor(int xInput, int yInput, int searchDistance)
+std::pair<int,int> Actions::getFreeNeighbor(int xInput, int yInput, int searchDistance)
 {
     int currentDistance = 1; // starting at one because we would never select 0,0
     
@@ -127,7 +127,7 @@ std::pair<int,int> ActionHandler::getFreeNeighbor(int xInput, int yInput, int se
     return std::make_pair(-1, -1); // return -1,-1 if no free neighbor found
 }
 
-std::pair<int,int> ActionHandler::getEmptyTileNextToRoad(int xInput, int yInput, int searchDistance)
+std::pair<int,int> Actions::getEmptyTileNextToRoad(int xInput, int yInput, int searchDistance)
 {
     int currentDistance = 1; // starting at one because we would never select 0,0
     
@@ -235,7 +235,7 @@ std::pair<int,int> ActionHandler::getEmptyTileNextToRoad(int xInput, int yInput,
     return std::make_pair(-1, -1); // return -1,-1 if no free neighbor found
 }
 
-void ActionHandler::harvestTree()
+void Actions::harvestTree()
 {
     int selectedXTile = pGameMap->getSelectedXIndex();
     int selectedYTile = pGameMap->getSelectedYIndex();
@@ -276,7 +276,7 @@ void ActionHandler::harvestTree()
 
 }
 
-void ActionHandler::step()
+void Actions::step()
 { // stuff we will do once a frame
     aStar.updateNodeMap();
 }

@@ -1,5 +1,5 @@
-#ifndef ACTIONHANDLER_HEADER_
-#define ACTIONHANDLER_HEADER_
+#ifndef ACTIONS_HEADER_
+#define ACTIONS_HEADER_
 
 #include <SDL3/SDL.h>
 #include <utility>
@@ -10,7 +10,7 @@
 #include "Tile.h"
 #include "AStar.h"
 
-class ActionHandler
+class Actions
 {
 private:
     Inventory *pGameInventory;
@@ -25,7 +25,7 @@ private:
     void harvestTree();
 
 public:
-    ActionHandler();
+    Actions();
     void init(Inventory *pGameInv);
     
     void handleEvent(SDL_Event &event);

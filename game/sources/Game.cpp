@@ -11,7 +11,7 @@ Game::Game()
     inventory.idleEmployees = 1;
     inventory.money = 9999; // a lot of money for testing
 
-    actionHandler.init( &inventory );
+    actions.init( &inventory );
 }
 
 bool Game::init()
@@ -79,7 +79,7 @@ void Game::run()
                 builder.handleEvent(event);
                 pGameMap->handleKeyboardEvent(event);
                 pGameMap->handleMouseEvent(event, builder.uiIsTriggered());
-                actionHandler.handleEvent(event);
+                actions.handleEvent(event);
             }
         }
         if( !running )
@@ -87,7 +87,7 @@ void Game::run()
 
         //before rendering stuff
         builder.buildItem();
-        actionHandler.step();
+        actions.step();
         
         // rerender the screen
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);

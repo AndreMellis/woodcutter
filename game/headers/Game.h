@@ -14,7 +14,7 @@
 #include "Map.h"
 #include "Builder.h"
 #include "Inventory.h"
-#include "ActionHandler.h"
+#include "Actions.h"
 #include "AStar.h"
 
 class Game
@@ -25,7 +25,7 @@ private:
     Map *pGameMap;
     Builder builder;
     Inventory inventory;
-    ActionHandler actionHandler;
+    Actions actions;
 
     bool loadAssets(); // loads all assets into the array
 
