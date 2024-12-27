@@ -9,12 +9,13 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "Assets.h"
-#include "GameSettings.h"
-#include "Map.h"
-#include "Builder.h"
-#include "Inventory.h"
 #include "ActionHandler.h"
+#include "GameSettings.h"
+#include "SaveLoader.h"
+#include "Inventory.h"
+#include "Builder.h"
+#include "Assets.h"
+#include "Map.h"
 
 class Game
 {
@@ -25,6 +26,7 @@ private:
     Builder builder;
     Inventory inventory;
     ActionHandler actionHandler;
+    SaveLoader saveLoader;
 
     bool loadAssets(); // loads all assets into the array
 

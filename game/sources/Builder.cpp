@@ -7,10 +7,12 @@ Builder::Builder()
 
     uiIsShowing = 0;
 
-    iconRects[ROAD_ICON].x = 0;
-    iconRects[ROAD_ICON].y = 0;
-    iconRects[ROAD_ICON].w = iconSize;
-    iconRects[ROAD_ICON].h = iconSize;
+    arrUIRects[ROAD_ICON_RECT] = { (ROAD_ICON_RECT * GameSettings::tileWidth) + fIconBorderWidth,
+                                    fIconBorderWidth,
+                                    GameSettings::tileWidth - ( fIconBorderWidth * 2 ),
+                                    fBuildUIHeight - ( fIconBorderWidth * 2 )};
+                                    
+    arrUIRects[UI_BACKGROUND_RECT] = {0, 0, GameSettings::windowWidth,fBuildUIHeight };
 }
 
 void Builder::loadAssets(SDL_Renderer *renderer)
@@ -22,7 +24,19 @@ void Builder::renderUI(SDL_Renderer *renderer)
 {
     if(uiIsShowing)
     {
-        SDL_RenderTexture(renderer, builderTextureArray[ROAD_ICON], NULL, &iconRects[ROAD_ICON]);
+        SDL_SetRenderDrawColor(renderer, 217, 217, 217, 1); // solid gray
+        SDL_RenderFillRect( renderer, &arrUIRects[UI_BACKGROUND_RECT] ); // draw the solid grey background
+
+        // now I will draw all the lines
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1); // solid black
+        int fLineDist = GameSettings::tileWidth;
+        for(int lines = fLineDist; lines < GameSettings::windowWidth; lines += fLineDist  )
+        {
+            SDL_RenderLine( renderer, lines, 0, lines, fBuildUIHeight );
+        }
+        SDL_RenderLine( renderer, 0, fBuildUIHeight, GameSettings::windowWidth, fBuildUIHeight ); // draw a line along the bottom
+
+        SDL_RenderTexture( renderer, builderTextureArray[ROAD_ICON], NULL, &arrUIRects[ROAD_ICON_RECT] );
     }
 }
 
@@ -55,7 +69,7 @@ void Builder::handleClick(float mouseX, float mouseY)
     // make a rect of only the pixel I clicked
     SDL_FRect clickedArea = {mouseX, mouseY, 1, 1};
     
-    if( SDL_HasRectIntersectionFloat(&clickedArea, &iconRects[ROAD_ICON] ) )
+    if( SDL_HasRectIntersectionFloat(&clickedArea, &arrUIRects[ROAD_ICON_RECT] ) )
     {
         // I clicked on the road
         mode = BuildMode::ROAD;

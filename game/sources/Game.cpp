@@ -12,6 +12,7 @@ Game::Game()
     inventory.money = 9999; // a lot of money for testing
 
     actionHandler.init( &inventory );
+    saveLoader.init(&inventory);
 }
 
 bool Game::init()
@@ -76,6 +77,16 @@ void Game::run()
                 break;
             } else
             {
+                if(event.type == SDL_EVENT_KEY_DOWN)
+                {
+                    switch( event.key.key )
+                    {
+                        case SDLK_LCTRL:
+                        case SDLK_RCTRL:
+                            saveLoader.saveGame();
+                            break;
+                    }
+                }
                 builder.handleEvent(event);
                 pGameMap->handleKeyboardEvent(event);
                 pGameMap->handleMouseEvent(event, builder.uiIsTriggered());

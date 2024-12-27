@@ -1,16 +1,18 @@
 #ifndef BUILDER_HEADER_
 #define BUILDER_HEADER_
 
-#include "Map.h"
-#include "Tile.h"
-#include "TextureHandler.h"
 #include <SDL3/SDL.h>
+#include "TextureHandler.h"
+#include "GameSettings.h"
+#include "Tile.h"
+#include "Map.h"
 
 enum class BuildMode
 {
     NONE,
     ROAD
 };
+
 
 class Builder
 {
@@ -19,11 +21,15 @@ private:
     Map *pGameMap;
     bool uiIsShowing; // we only want to check for clicks if the ui is up
 
-    const int iconSize = 20;
-
+    enum UIRects{ ROAD_ICON_RECT, UI_BACKGROUND_RECT, UI_RECT_SIZE };
     enum buildIcons { ROAD_ICON, ICON_COUNT };   
+
+    SDL_FRect arrUIRects[UI_RECT_SIZE];
     SDL_Texture *builderTextureArray[ICON_COUNT];
-    SDL_FRect iconRects[ICON_COUNT];
+
+    const float fIconBorderWidth = 5.00;
+    const int iconSize = 20;
+    const float fBuildUIHeight = GameSettings::tileHeight;
 
     void handleClick(float mouseX, float mouseY);
 

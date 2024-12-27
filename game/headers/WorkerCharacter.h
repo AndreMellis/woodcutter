@@ -9,13 +9,15 @@
 
 enum class WorkerCommand
 {
-    HARVEST_COMMAND
+    HARVEST_COMMAND,
+    GATHER_WOOD_COMMAND
 };
 
 class WorkerCharacter
 {
 private:
     std::stack< std::pair <int, int> > stkPathToTake;
+    std::stack< std::pair <int, int> > stkReturnPath;
 
     int iLastXTile;
     int iLastYTile;
@@ -30,7 +32,7 @@ public:
     ~WorkerCharacter();
 
     void step();
-    bool workerCanBeDeleted() { return bTaskHasBeenCompleted; }
+    bool workerCanBeDeleted() { return bTaskHasBeenCompleted && stkReturnPath.empty(); }
 };
 
 #endif
