@@ -5,19 +5,18 @@ Builder::Builder()
     mode = BuildMode::NONE;
     pGameMap = Map::getInstance();
 
+    bLoadIsTriggered = 0;
+    bSaveIsTriggered = 0;
     uiIsShowing = 0;
 
-    arrUIRects[ROAD_ICON_RECT] = { (ROAD_ICON_RECT * GameSettings::tileWidth) + fIconBorderWidth,
-                                    fIconBorderWidth,
-                                    GameSettings::tileWidth - ( fIconBorderWidth * 2 ),
-                                    fBuildUIHeight - ( fIconBorderWidth * 2 )};
-                                    
-    arrUIRects[UI_BACKGROUND_RECT] = {0, 0, GameSettings::windowWidth,fBuildUIHeight };
+    createRects();
 }
 
 void Builder::loadAssets(SDL_Renderer *renderer)
 {
     builderTextureArray[ROAD_ICON] = TextureHandler::makeTexture("assets/terrain/dirt.png", renderer);
+    builderTextureArray[LOAD_ICON] = TextureHandler::makeTexture("assets/icons/load.png", renderer);
+    builderTextureArray[SAVE_ICON] = TextureHandler::makeTexture("assets/icons/save.png", renderer);
 }
 
 void Builder::renderUI(SDL_Renderer *renderer)
@@ -37,6 +36,8 @@ void Builder::renderUI(SDL_Renderer *renderer)
         SDL_RenderLine( renderer, 0, fBuildUIHeight, GameSettings::windowWidth, fBuildUIHeight ); // draw a line along the bottom
 
         SDL_RenderTexture( renderer, builderTextureArray[ROAD_ICON], NULL, &arrUIRects[ROAD_ICON_RECT] );
+        SDL_RenderTexture( renderer, builderTextureArray[LOAD_ICON], NULL, &arrUIRects[UI_LOAD_RECT] );
+        SDL_RenderTexture( renderer, builderTextureArray[SAVE_ICON], NULL, &arrUIRects[UI_SAVE_RECT] );
     }
 }
 
@@ -74,6 +75,12 @@ void Builder::handleClick(float mouseX, float mouseY)
         // I clicked on the road
         mode = BuildMode::ROAD;
         pGameMap->deselectTile();
+    } else if( SDL_HasRectIntersectionFloat(&clickedArea, &arrUIRects[UI_SAVE_RECT] ) )
+    {
+        bSaveIsTriggered = 1;
+    } else if( SDL_HasRectIntersectionFloat(&clickedArea, &arrUIRects[UI_LOAD_RECT] ) )
+    {
+        bLoadIsTriggered = 1;
     }
 }
 
@@ -97,4 +104,25 @@ void Builder::buildItem()
             pGameMap->deselectTile();
         }
     }
+}
+
+void Builder::createRects()
+{
+    arrUIRects[ROAD_ICON_RECT] = { (ROAD_ICON_RECT * GameSettings::tileWidth) + fIconBorderWidth,
+                                    fIconBorderWidth,
+                                    GameSettings::tileWidth - ( fIconBorderWidth * 2 ),
+                                    fBuildUIHeight - ( fIconBorderWidth * 2 )};
+
+    arrUIRects[UI_LOAD_RECT] = { GameSettings::windowWidth - GameSettings::tileWidth - fIconBorderWidth,
+                                 fIconBorderWidth,
+                                 GameSettings::tileWidth - ( fIconBorderWidth * 2 ),
+                                 fBuildUIHeight - ( fIconBorderWidth * 2) };
+    
+    arrUIRects[UI_SAVE_RECT] = { GameSettings::windowWidth - ( GameSettings::tileWidth * 2 ) - fIconBorderWidth,
+                                 fIconBorderWidth,
+                                 GameSettings::tileWidth - ( fIconBorderWidth * 2 ),
+                                 fBuildUIHeight - ( fIconBorderWidth * 2) };
+    
+    
+    arrUIRects[UI_BACKGROUND_RECT] = {0, 0, GameSettings::windowWidth,fBuildUIHeight };
 }

@@ -29,6 +29,7 @@ private:
     const std::string strSaveFolderPath = strProfilePath + ".local/share/woodsman/";
     const std::string strBaseMapSave = strSaveFolderPath + "base.map";
     const std::string strObjectMapSave = strSaveFolderPath + "objects.map";
+    const std::string strInventorySave = strSaveFolderPath + "inventory.txt";
 
     Map *pGameMap;
     Inventory *pGameInventory;
@@ -39,6 +40,7 @@ public:
     void init(Inventory *inventory);
 
     void saveGame();
+    void loadGame();
 };
 
 #endif

@@ -77,16 +77,6 @@ void Game::run()
                 break;
             } else
             {
-                if(event.type == SDL_EVENT_KEY_DOWN)
-                {
-                    switch( event.key.key )
-                    {
-                        case SDLK_LCTRL:
-                        case SDLK_RCTRL:
-                            saveLoader.saveGame();
-                            break;
-                    }
-                }
                 builder.handleEvent(event);
                 pGameMap->handleKeyboardEvent(event);
                 pGameMap->handleMouseEvent(event, builder.uiIsTriggered());
@@ -95,6 +85,17 @@ void Game::run()
         }
         if( !running )
             break;
+
+        // UI Shiz
+        if(builder.bSaveIsTriggered)
+        {
+            builder.bSaveIsTriggered = 0;
+            saveLoader.saveGame();
+        } else if(builder.bLoadIsTriggered)
+        {
+            builder.bLoadIsTriggered = 0;
+            saveLoader.loadGame();
+        }
 
         //before rendering stuff
         builder.buildItem();

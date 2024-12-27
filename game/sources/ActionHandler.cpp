@@ -31,6 +31,9 @@ void ActionHandler::dispatchWorker()
     int selectedXTile = pGameMap->getSelectedXIndex();
     int selectedYTile = pGameMap->getSelectedYIndex();
 
+    if(selectedXTile < 0 || selectedYTile < 0)
+        return; // no tile selected
+
     std::stack< std::pair<int,int> > stkPathToTake = aStar.findPath( GameSettings::millXLocation, GameSettings::millYLocation, selectedXTile, selectedYTile );
     if( stkPathToTake.top().first < 0 || stkPathToTake.top().second < 0 )
         return; // no path to target
