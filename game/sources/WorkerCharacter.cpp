@@ -70,9 +70,13 @@ void WorkerCharacter::step()
         {
             case WorkerCommand::HARVEST_COMMAND:
                 actions.harvestTree( stkPathToTake.top().first, stkPathToTake.top().second );
-                bTaskHasBeenCompleted = 1;
+                break;
+            case WorkerCommand::GATHER_WOOD_COMMAND:
+                pGameMap->changeObjectMapTileType( stkPathToTake.top().first, stkPathToTake.top().second, TileType::Empty );
                 break;
         }
+        
+        bTaskHasBeenCompleted = 1;
     } else if( !stkReturnPath.empty() )
     { // now we need to head back
         if( stkReturnPath.size() > 1 )

@@ -27,7 +27,7 @@ public:
 
     void init(Inventory *pGameInv);
 
-    void dispatchWorker(WorkerCommand command);
+    void dispatchWorker();
 
     void handleEvent(SDL_Event &event);
     void step(); // this will handle things we do once a frame

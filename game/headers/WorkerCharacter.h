@@ -33,6 +33,8 @@ public:
 
     void step();
     bool workerCanBeDeleted() { return bTaskHasBeenCompleted && stkReturnPath.empty(); }
+
+    WorkerCommand getCommand() { return command; } // mainly because I want handler to handle inventory
 };
 
 #endif
