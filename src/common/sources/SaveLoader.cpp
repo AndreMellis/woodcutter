@@ -53,6 +53,7 @@ void SaveLoader::saveGame()
         inventoryFile << pGameInventory->totalEmployees << "\n";
         inventoryFile << pGameInventory->idleEmployees << "\n";
         inventoryFile << pGameInventory->money << "\n";
+        inventoryFile << pGameInventory->day<< "\n";
     } else
     {
         std::cerr << "Failed to save file " << strInventorySave << "\n";
@@ -167,6 +168,9 @@ void SaveLoader::loadGame()
 
         std::getline(inventoryFile, fileLine);
         pGameInventory->money = std::stoi(fileLine);
+
+        std::getline(inventoryFile, fileLine);
+        pGameInventory->day = std::stoi(fileLine);
     } else
     {
         std::cerr << "Failed to open save file " << strInventorySave << "\n";

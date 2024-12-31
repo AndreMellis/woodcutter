@@ -7,6 +7,7 @@ struct Inventory
     int totalEmployees;
     int idleEmployees;
     int money;
+    int day; // 1-7, Sun-Mon
 };
 
 #endif

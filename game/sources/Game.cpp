@@ -10,9 +10,7 @@ Game::Game()
     inventory.totalEmployees = 1; // you start the game alone
     inventory.idleEmployees = 1;
     inventory.money = 9999; // a lot of money for testing
-
-    actionHandler.init( &inventory );
-    saveLoader.init(&inventory);
+    inventory.day = 1;
 }
 
 bool Game::init()
@@ -26,6 +24,9 @@ bool Game::init()
         if( loadAssets() )
         {
             pGameMap->genMap();
+            actionHandler.init( &inventory );
+            saveLoader.init(&inventory);
+            worldClock.init(&inventory);
         } else
         {
             std::cerr << "Failed to load game assets!\n";
@@ -100,6 +101,7 @@ void Game::run()
         //before rendering stuff
         builder.buildItem();
         actionHandler.step();
+        worldClock.progress();
         
         // rerender the screen
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);

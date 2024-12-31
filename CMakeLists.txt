@@ -23,7 +23,8 @@ set(SOURCES
     src/common/sources/TextureHandler.cpp
     src/common/sources/AStar.cpp
     src/common/sources/SaveLoader.cpp
-    src/world/sources/Map.cpp)
+    src/world/sources/Map.cpp
+    src/world/sources/DayTime.cpp)
 
 add_executable(woodsman.out main.cpp ${SOURCES})
 target_link_libraries(woodsman.out PRIVATE SDL3::SDL3 SDL3_image)

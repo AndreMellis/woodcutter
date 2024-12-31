@@ -14,6 +14,7 @@
 #include "SaveLoader.h"
 #include "Inventory.h"
 #include "Builder.h"
+#include "DayTime.h"
 #include "Assets.h"
 #include "Map.h"
 
@@ -27,6 +28,7 @@ private:
     Inventory inventory;
     ActionHandler actionHandler;
     SaveLoader saveLoader;
+    DayTime worldClock;
 
     bool loadAssets(); // loads all assets into the array
 
