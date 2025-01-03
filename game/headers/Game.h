@@ -10,6 +10,7 @@
 #include <ctime>
 
 #include "ActionHandler.h"
+#include "UserInterface.h"
 #include "GameSettings.h"
 #include "SaveLoader.h"
 #include "Inventory.h"
@@ -29,6 +30,7 @@ private:
     ActionHandler actionHandler;
     SaveLoader saveLoader;
     DayTime worldClock;
+    UserInterface uiHandler;
 
     bool loadAssets(); // loads all assets into the array
 

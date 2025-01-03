@@ -22,6 +22,7 @@ set(SOURCES
     game/sources/WorkerCharacter.cpp
     src/common/sources/TextureHandler.cpp
     src/common/sources/AStar.cpp
+    src/common/sources/UserInterface.cpp
     src/common/sources/SaveLoader.cpp
     src/world/sources/Map.cpp
     src/world/sources/DayTime.cpp)

@@ -108,6 +108,7 @@ void Game::run()
         SDL_RenderClear(renderer);
         pGameMap->render(renderer);
         builder.renderUI(renderer);
+        uiHandler.drawBaseUI( renderer, 450, 300, 240, 480 );
         SDL_RenderPresent(renderer);
     }
 }
