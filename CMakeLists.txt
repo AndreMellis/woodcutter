@@ -13,6 +13,7 @@ include_directories("game/headers"
 #link sdl2 libraries
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
 find_package(SDL3_image REQUIRED)
+find_package(SDL3_ttf REQUIRED)
 
 set(SOURCES 
     game/sources/Builder.cpp
@@ -28,4 +29,4 @@ set(SOURCES
     src/world/sources/DayTime.cpp)
 
 add_executable(woodsman.out main.cpp ${SOURCES})
-target_link_libraries(woodsman.out PRIVATE SDL3::SDL3 SDL3_image)
+target_link_libraries(woodsman.out PRIVATE SDL3::SDL3 SDL3_image SDL3_ttf)

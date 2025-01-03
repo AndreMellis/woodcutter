@@ -21,3 +21,26 @@ SDL_Texture *TextureHandler::makeTexture(std::string path, SDL_Renderer *rendere
 
     return tempTexture;
 }
+
+SDL_Texture *TextureHandler::renderTextureFromFont( char inputString[], TTF_Font *gFont, SDL_Renderer *renderer )
+{
+    SDL_Surface *textSurface = nullptr;
+    SDL_Texture *textTexture = nullptr;
+    SDL_Color colorBlack = { 0, 0, 0, 225 };
+
+    textSurface = TTF_RenderText_Solid( gFont, inputString, 0, colorBlack );
+    if( !textSurface )
+    {
+        std::cerr << "Failed to create surface from string! SDL_Error: " << SDL_GetError() << "\n";
+    } else
+    {
+        textTexture = SDL_CreateTextureFromSurface( renderer, textSurface );
+        if( !textTexture )
+        {
+            std::cerr << "Failed to create texture from string! SDL_Error: " << SDL_GetError() << "\n";
+        }
+    }
+
+    SDL_DestroySurface(textSurface);
+    return textTexture;
+}

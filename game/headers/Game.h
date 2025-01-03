@@ -3,6 +3,7 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
 #include <string>
@@ -24,6 +25,7 @@ class Game
 private:
     SDL_Renderer *renderer;
     SDL_Window *window;
+    TTF_Font *pGameFont;
     Map *pGameMap;
     Builder builder;
     Inventory inventory;

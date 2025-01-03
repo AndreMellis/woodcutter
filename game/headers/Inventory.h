@@ -10,4 +10,16 @@ struct Inventory
     int day; // 1-7, Sun-Mon
 };
 
+
+enum class ItemTypes
+{
+    INSERT_ITEM_HERE
+};
+
+struct InventoryItem
+{
+    ItemTypes eItemType;
+    int iItemCount;
+};
+
 #endif

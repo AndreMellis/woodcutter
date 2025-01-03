@@ -4,12 +4,13 @@ Game::Game()
 {
     renderer = nullptr;
     window = nullptr;
+    pGameFont = nullptr;
     pGameMap = Map::getInstance();
     
     inventory.wood = 0;
     inventory.totalEmployees = 1; // you start the game alone
     inventory.idleEmployees = 1;
-    inventory.money = 9999; // a lot of money for testing
+    inventory.money = 100000; // a lot of money for testing
     inventory.day = 1;
 }
 
@@ -21,16 +22,22 @@ bool Game::init()
     if( SDL_CreateWindowAndRenderer("Woodsman", GameSettings::windowWidth, GameSettings::windowHeight, SDL_WINDOW_FULLSCREEN, &window, &renderer) )
     {
         SDL_SetRenderDrawColor(renderer, 0Xff, 0xFF, 0xFF, 0xFF);
-        if( loadAssets() )
+        if(TTF_Init() == -1)
         {
-            pGameMap->genMap();
-            actionHandler.init( &inventory );
-            saveLoader.init(&inventory);
-            worldClock.init(&inventory);
+            std::cerr << "Failed to initialize TTF! SDL_ERROR: " << SDL_GetError() << "\n";
         } else
         {
-            std::cerr << "Failed to load game assets!\n";
-            success = 0;
+            if( loadAssets() )
+            {
+                pGameMap->genMap();
+                actionHandler.init( &inventory );
+                saveLoader.init(&inventory);
+                worldClock.init(&inventory);
+            } else
+            {
+                std::cerr << "Failed to load game assets!\n";
+                success = 0;
+            }
         }
     } else
     {
@@ -53,6 +60,13 @@ bool Game::loadAssets()
     //load map assets
     pGameMap->loadAssets(renderer);
     builder.loadAssets(renderer);
+
+    pGameFont = TTF_OpenFont( "assets/fonts/rye.ttf", 14 );
+    if(pGameFont == nullptr)
+    {
+        std::cerr << "Failed to open font assets/fonts/rye.ttf! SDL_Error: " << SDL_GetError() << "\n";
+        return 0;
+    }
 
     return 1;
 }
@@ -108,7 +122,7 @@ void Game::run()
         SDL_RenderClear(renderer);
         pGameMap->render(renderer);
         builder.renderUI(renderer);
-        uiHandler.drawBaseUI( renderer, 450, 300, 240, 480 );
+        uiHandler.drawBaseUI( renderer, &inventory, pGameFont, 450, 300 );
         SDL_RenderPresent(renderer);
     }
 }
